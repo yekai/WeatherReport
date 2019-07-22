@@ -46,7 +46,25 @@ class WRDataBaseManager {
             let executeSql = "INSERT INTO \(model.sqlTableName())(\(model.sqlTableKeys())) VALUES (\(model.sqlTableValues()));"
             res = db.executeUpdate(executeSql, withArgumentsIn: model.sqlTableValues().components(separatedBy: ","))
         }
-        
         return res
+    }
+    
+    func query(_ model: WRDatabaseModelProtocol) -> [WRBasicModel] {
+        var resultModel: [WRBasicModel] = [WRBasicModel]()
+        self.dbQueue.inDatabase { (db) in
+            let executeSql = "SELECT * FROM \(model.sqlTableName());"
+            let result:FMResultSet = try! db.executeQuery(executeSql, values: nil)
+            
+            while(result.next()) {
+                let classObj = type(of: model)
+                var obj: classObj = classObj()
+                let objInfo:[String: String] = result.resultDictionary
+                for key in objInfo.keys {
+                    obj.setValue(objInfo[key], forKeyPath:key)
+                }
+                resultModel.append(obj)
+            }
+        }
+        return resultModel
     }
 }

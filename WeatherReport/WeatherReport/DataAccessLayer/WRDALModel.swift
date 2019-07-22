@@ -8,7 +8,7 @@
 
 import UIKit
 
-class WRBasicModel {
+class WRBasicModel: NSObject {
     var id: String
     var successModel: Bool = false
     
