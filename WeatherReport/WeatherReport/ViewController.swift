@@ -7,14 +7,22 @@
 //
 
 import UIKit
+import Alamofire
 
 class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        request()
     }
-
+    
+    func request() {
+        WRDALFactory().request(weatherInfo: "Sydney", successHandler: { (model) in
+            
+        }) { (error) in
+            
+        }
+    }
 
 }
 

@@ -5,3 +5,6 @@
   Created by Ice on 2019/7/20.
   Copyright © 2019 testOrg. All rights reserved.
 */
+"com.city.Sydney" = "Sydney";
+"com.city.Melbourne" = "Melbourne";
+"com.city.Wollongong" = "Wollongong";
