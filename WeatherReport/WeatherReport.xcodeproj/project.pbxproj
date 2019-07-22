@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		1824E0C645C886DE8B34AA35 /* Pods_WeatherReport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4837DD4536DB49754117081C /* Pods_WeatherReport.framework */; };
 		4A02B22149DEB91003CC6B5A /* Pods_WeatherReportTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D386D10E00934692638EA8D /* Pods_WeatherReportTests.framework */; };
+		4D7C36AC22E5F95800D894F1 /* String+Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D7C36AB22E5F95800D894F1 /* String+Utility.swift */; };
 		4DBE4A2722E2D12E0059A9BE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DBE4A2622E2D12E0059A9BE /* AppDelegate.swift */; };
 		4DBE4A2922E2D12E0059A9BE /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DBE4A2822E2D12E0059A9BE /* ViewController.swift */; };
 		4DBE4A2C22E2D12E0059A9BE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4DBE4A2A22E2D12E0059A9BE /* Main.storyboard */; };
@@ -54,6 +55,7 @@
 		3C502015F8A290560167204F /* Pods-WeatherReportUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WeatherReportUITests.release.xcconfig"; path = "Target Support Files/Pods-WeatherReportUITests/Pods-WeatherReportUITests.release.xcconfig"; sourceTree = "<group>"; };
 		3D386D10E00934692638EA8D /* Pods_WeatherReportTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WeatherReportTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4837DD4536DB49754117081C /* Pods_WeatherReport.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WeatherReport.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		4D7C36AB22E5F95800D894F1 /* String+Utility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Utility.swift"; sourceTree = "<group>"; };
 		4DBE4A2322E2D12E0059A9BE /* WeatherReport.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WeatherReport.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4DBE4A2622E2D12E0059A9BE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4DBE4A2822E2D12E0059A9BE /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -222,6 +224,7 @@
 			isa = PBXGroup;
 			children = (
 				5B6B82B622E58C6F00C6E7C5 /* Date+Utility.swift */,
+				4D7C36AB22E5F95800D894F1 /* String+Utility.swift */,
 			);
 			path = Category;
 			sourceTree = "<group>";
@@ -496,6 +499,7 @@
 				5B6B82C222E5B53600C6E7C5 /* WRDataBaseManager.swift in Sources */,
 				5B6B82AC22E5650000C6E7C5 /* WRDALConstants.swift in Sources */,
 				5B6B82B422E5893F00C6E7C5 /* WRDALModel.swift in Sources */,
+				4D7C36AC22E5F95800D894F1 /* String+Utility.swift in Sources */,
 				4DBE4A2722E2D12E0059A9BE /* AppDelegate.swift in Sources */,
 				5B6B82BC22E5906100C6E7C5 /* WRDALHttpClient.swift in Sources */,
 			);

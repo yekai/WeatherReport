@@ -38,6 +38,16 @@ class WRDALModel: WRBasicModel, WRDatabaseModelProtocol {
         self.init("", cityName: "", updatedTime: Date(), weather: nil, temperature: nil, wind: nil)
     }
     
+    convenience init(_ dict: [String: Any]) {
+        let id = dict["id"] as! String
+        let cityName = dict["cityName"] as! String
+        let weather = dict["weather"] as? String
+        let temperature = dict["temperature"] as? String
+        let wind = dict["wind"] as? String
+        let updatedTime = (dict["updatedTime"] as! String).dateOfYYYYMMDDHHMMSS()!
+        self.init(id, cityName: cityName, updatedTime: updatedTime, weather: weather, temperature: temperature, wind: wind)
+    }
+    
     func displayedUpdatedTime() -> String {
         return updatedTime.stringOfEEEEHHMMAA() ?? ""
     }
@@ -80,7 +90,7 @@ class WRDALModel: WRBasicModel, WRDatabaseModelProtocol {
     }
     
     func sqlTableValues() -> String {
-        return "\(id),\(cityName),\(String(describing: updatedTime.stringOfYYYYMMDDHHMMSS())),\(String(describing: weather)),\(String(describing: temperature)),\(String(describing: wind))"
+        return "'\(id)','\(cityName)','\(String(describing: updatedTime.stringOfYYYYMMDDHHMMSS()))','\(String(describing: weather))','\(String(describing: temperature))','\(String(describing: wind))'"
     }
 }
 
@@ -97,6 +107,13 @@ class WRCityModel: WRBasicModel, WRDatabaseModelProtocol {
     
     convenience init() {
         self.init("", cityName: "", localizeCityKey: "")
+    }
+    
+    convenience init(_ dict: [String: Any]) {
+        let id = dict["id"] as! String
+        let cityName = dict["cityName"] as! String
+        let localizeCityKey = dict["localizeCityKey"] as! String
+        self.init(id, cityName: cityName, localizeCityKey: localizeCityKey)
     }
     
     func displayedCityName() -> String {
@@ -120,6 +137,6 @@ class WRCityModel: WRBasicModel, WRDatabaseModelProtocol {
     }
     
     func sqlTableValues() -> String {
-        return "\(id),\(cityName),\(localizeCityKey)"
+        return "'\(id)','\(cityName)','\(localizeCityKey)'"
     }
 }

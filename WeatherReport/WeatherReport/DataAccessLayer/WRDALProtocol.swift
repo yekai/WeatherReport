@@ -12,5 +12,5 @@ protocol WRDALProtocol {
     func request(weatherInfo city: String,
                  successHandler: @escaping (WRBasicModel) -> Void,
                  failureHandler: @escaping (Error?) -> Void)
-    func requestSupportedCityList() -> [String: String]
+    func requestSupportedCityList() -> [WRCityModel]
 }

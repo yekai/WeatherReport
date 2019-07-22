@@ -11,7 +11,6 @@ import Alamofire
 import SwiftyJSON
 
 class WRDALFactory: WRDALProtocol {
-    
     func request(weatherInfo city: String,
                  successHandler: @escaping (WRBasicModel) -> Void,
                  failureHandler: @escaping (Error?) -> Void) {
@@ -33,20 +32,24 @@ class WRDALFactory: WRDALProtocol {
         }
     }
     
-    func requestSupportedCityList() -> [String: String] {
+    func requestSupportedCityList() -> [WRCityModel] {
         let path:String = Bundle.main.path(forResource: "supportedCityList", ofType: "plist")!
         let citiesInfo: [String: String] = NSDictionary(contentsOfFile: path) as! [String: String]
-        var newCities = citiesInfo
+        var newCities = [WRCityModel]()
         for key in citiesInfo.keys {
-            if let value = newCities[key] {
-                newCities[key] = WRLocalizeMgr.localize(value)
+            if let value = citiesInfo[key] {
+                let id = "".uniqueID()
+                let cityName = key
+                let localizeKey = value
+                let obj = WRCityModel(id, cityName:cityName, localizeCityKey: localizeKey)
+                newCities.append(obj)
             }
         }
         return newCities
     }
     
     func formattedWRDALModel(_ city: String, dataObj: Any?) -> WRDALModel {
-        let id = NSUUID.init(uuidString: Date().stringOfYYYYMMDDHHMMSS()!)?.uuidString ?? ""
+        let id = "".uniqueID()
         let cityName = city
         let updatedTime = Date()
 
@@ -67,14 +70,57 @@ class WRDALFactory: WRDALProtocol {
 }
 
 class WRDatabaseFactory: WRDALProtocol {
+    let databaseManager = WRDataBaseManager.sharedInstance
+    
     func request(weatherInfo city: String,
                  successHandler: @escaping (WRBasicModel) -> Void,
                  failureHandler: @escaping (Error?) -> Void) {
-        
+        let model = WRDALModel()
+        model.cityName = city
+        if let queryModel = databaseManager.query(model) {
+            let obj = WRDALModel(queryModel)
+            successHandler(obj)
+        } else {
+            failureHandler(AFError.responseValidationFailed(reason: .dataFileNil))
+        }
     }
     
-    func requestSupportedCityList() -> [String : String] {
-        return ["":""]
+    func requestSupportedCityList() -> [WRCityModel] {
+        let queryList:[[String: Any]] = databaseManager.queryAll(WRCityModel())
+        var result:[WRCityModel] = [WRCityModel]()
+        for dict in queryList {
+            let obj = WRCityModel(dict)
+            result.append(obj)
+        }
+        return result
+    }
+    
+    func saveSupportedCityList(_ models: [WRCityModel]) {
+        for model in models {
+            let _ = databaseManager.saveObj(model)
+        }
+    }
+}
+
+enum WRDALSolution {
+    case Remote
+    case Database
+}
+
+class WRDALManager {
+    static var sharedInstance: WRDALManager {
+        struct Singleton {
+            static let instance: WRDALManager = WRDALManager()
+        }
+        return Singleton.instance
+    }
+    
+    private let remoteFactory = WRDALFactory()
+    private let databaseFactory = WRDatabaseFactory()
+    
+    func saveLocalCityList() {
+        let localCitiesList = remoteFactory.requestSupportedCityList()
+        databaseFactory.saveSupportedCityList(localCitiesList)
     }
 }
 

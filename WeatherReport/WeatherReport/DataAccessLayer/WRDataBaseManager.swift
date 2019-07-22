@@ -13,6 +13,7 @@ protocol WRDatabaseModelProtocol {
     func sqlTableString() -> String
     func sqlTableKeys() -> String
     func sqlTableValues() -> String
+    func cityName() -> String
 }
 
 class WRDataBaseManager {
@@ -32,10 +33,27 @@ class WRDataBaseManager {
         self.dbQueue = FMDatabaseQueue(path:dbPath)!
     }
     
-    func register(_ models: [WRDatabaseModelProtocol]) {
-        for protocolObj in models {
+    func isDatabaseAvailable() -> Bool {
+        let pathAvailable = FileManager.default.fileExists(atPath: self.dbPath)
+        var count = 0;
+        if pathAvailable {
             self.dbQueue.inDatabase { (db) in
-                try! db.executeUpdate(protocolObj.sqlTableString(), values: nil)
+                let result: FMResultSet = try! db.executeQuery("SELECT count(*) FROM sqlite_master where type='table';", values: nil)
+                while result.next() {
+                    count = Int(result.int(forColumnIndex: 0))
+                }
+            }
+        }
+        
+        return pathAvailable && count > 0
+    }
+    
+    func register(_ models: [WRDatabaseModelProtocol]) {
+        if !isDatabaseAvailable() {
+            for protocolObj in models {
+                self.dbQueue.inDatabase { (db) in
+                    try! db.executeUpdate(protocolObj.sqlTableString(), values: nil)
+                }
             }
         }
     }
@@ -49,22 +67,47 @@ class WRDataBaseManager {
         return res
     }
     
-    func query(_ model: WRDatabaseModelProtocol) -> [WRBasicModel] {
-        var resultModel: [WRBasicModel] = [WRBasicModel]()
+    func query(_ model: WRDatabaseModelProtocol) -> [String: Any]? {
+        var resultModel: [[String: Any]] = [[String: Any]]()
+        self.dbQueue.inDatabase { (db) in
+            let executeSql = "SELECT * FROM \(model.sqlTableName()) WHERE cityName='\(model.cityName())';"
+            let result:FMResultSet = try! db.executeQuery(executeSql, values: nil)
+            
+            while(result.next()) {
+                let objInfo:[String: Any] = result.resultDictionary as! [String : Any]
+                resultModel.append(objInfo)
+            }
+        }
+        if resultModel.count > 0 {
+            return resultModel.first
+        }
+        return nil
+    }
+    
+    func queryAll(_ model: WRDatabaseModelProtocol) -> [[String: Any]] {
+        var resultModel: [[String: Any]] = [[String: Any]]()
         self.dbQueue.inDatabase { (db) in
             let executeSql = "SELECT * FROM \(model.sqlTableName());"
             let result:FMResultSet = try! db.executeQuery(executeSql, values: nil)
             
             while(result.next()) {
-                let classObj = type(of: model)
-                var obj: classObj = classObj()
-                let objInfo:[String: String] = result.resultDictionary
-                for key in objInfo.keys {
-                    obj.setValue(objInfo[key], forKeyPath:key)
-                }
-                resultModel.append(obj)
+                let objInfo:[String: Any] = result.resultDictionary as! [String : Any]
+                resultModel.append(objInfo)
             }
         }
         return resultModel
+    }
+    
+    func queryCount(_ model: WRDatabaseModelProtocol) -> Int {
+        var count = 0
+        self.dbQueue.inDatabase { (db) in
+            let executeSql = "SELECT count(*) FROM \(model.sqlTableName());"
+            let result:FMResultSet = try! db.executeQuery(executeSql, values: nil)
+            
+            while(result.next()) {
+                count = Int(result.int(forColumnIndex: 0))
+            }
+        }
+        return count
     }
 }
