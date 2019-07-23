@@ -38,7 +38,7 @@ class WRDALFactory {
         var newCities = [WRCityModel]()
         for key in citiesInfo.keys {
             if let value = citiesInfo[key] {
-                let id = "".uniqueID()
+                let id = String.uniqueID()
                 let cityName = key
                 let localizeKey = value
                 let obj = WRCityModel(id, cityName:cityName, localizeCityKey: localizeKey)
@@ -49,7 +49,7 @@ class WRDALFactory {
     }
     
     func formattedWRDALModel(_ city: String, dataObj: Any?) -> WRDALModel {
-        let id = "".uniqueID()
+        let id = String.uniqueID()
         let cityName = city
         let updatedTime = Date()
 
@@ -72,8 +72,8 @@ class WRDALFactory {
 class WRDatabaseFactory {
     let databaseClient = WRDatabaseClient.sharedInstance
     
-    init() {
-        databaseClient.register([WRDALModel(), WRCityModel()])
+    func registerModels() {
+        self.databaseClient.register([WRDALModel(), WRCityModel()])
     }
     
     func request(weatherInfo city: String,
@@ -130,6 +130,7 @@ class WRDALManager {
     }
     
     func saveLocalCityList() {
+        databaseFactory.registerModels()
         //there is a rule, we should not delete all the cities from cityList table if
         //there may be functions for delete cities in later development
         let count = databaseFactory.queryCount(WRCityModel())

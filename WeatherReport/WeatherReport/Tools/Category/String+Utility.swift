@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreFoundation
 
 extension String {
     func currentFormat() -> DateFormatter {
@@ -30,9 +31,9 @@ extension String {
         return dateFrom(format: "yyyy-MM-dd HH:mm:ss")
     }
     
-    func uniqueID() -> String {
-        let id: String = NSUUID.init().uuidString
-        let idComponents = id.components(separatedBy: "-")
-        return idComponents.joined(separator: "*")
+    static func uniqueID() -> String {
+        let cfuuid: CFUUID = CFUUIDCreate(kCFAllocatorDefault)
+        let id: String = CFUUIDCreateString(kCFAllocatorDefault, cfuuid) as String? ?? ""
+        return id
     }
 }
