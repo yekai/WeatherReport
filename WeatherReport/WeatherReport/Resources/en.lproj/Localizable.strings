@@ -8,3 +8,17 @@
 "com.city.Sydney" = "Sydney";
 "com.city.Melbourne" = "Melbourne";
 "com.city.Wollongong" = "Wollongong";
+
+"com.main.title" = "City Weather Forcast";
+"com.main.warning" = "Warning";
+"com.main.addCity.content" = "This function is in development, do it later...";
+"com.main.warning.network.unavailable" = "Sorry, The server side now is unavailable or you lost the network, please check.";
+
+"com.main.weather.key.city" = "City";
+"com.main.weather.key.updatedTime" = "Updated time";
+"com.main.weather.key.weather" = "Weather";
+"com.main.weather.key.temperature" = "Temperature";
+"com.main.weather.key.wind" = "Wind";
+"com.main.weather.key.networkMode" = "Network Mode";
+"com.main.weather.value.onlineMode" = "online Mode";
+"com.main.weather.value.offlineMode" = "offline Mode";

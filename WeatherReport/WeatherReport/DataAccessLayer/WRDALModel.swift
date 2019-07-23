@@ -94,7 +94,33 @@ class WRDALModel: WRBasicModel, WRDatabaseModelProtocol {
     }
     
     func sqlTableValues() -> String {
-        return "'\(id)','\(cityName)','\(String(describing: updatedTime.stringOfYYYYMMDDHHMMSS()))','\(String(describing: weather))','\(String(describing: temperature))','\(String(describing: wind))'"
+        let updatedTime = self.updatedTime.stringOfYYYYMMDDHHMMSS() ?? ""
+        let weather = self.weather ?? ""
+        let temperature = self.temperature ?? ""
+        let wind = self.wind ?? ""
+        return "'\(id)','\(cityName)','\(updatedTime)','\(weather)','\(temperature)','\(wind)'"
+    }
+    
+    func displayedKeys() -> [String] {
+        let networkState = WRLocalizeMgr.localize("com.main.weather.key.networkMode")
+        let city = WRLocalizeMgr.localize("com.main.weather.key.city")
+        let updatedTime = WRLocalizeMgr.localize("com.main.weather.key.updatedTime")
+        let weather = WRLocalizeMgr.localize("com.main.weather.key.weather")
+        let temperature = WRLocalizeMgr.localize("com.main.weather.key.temperature")
+        let wind = WRLocalizeMgr.localize("com.main.weather.key.wind")
+        
+        return [networkState, city, updatedTime, weather, temperature, wind]
+    }
+    
+    func displayedValues(_ netState: String, cityDisplayedValue: String) -> [String] {
+        let networkState = netState
+        let city = cityDisplayedValue
+        let updatedTime = displayedUpdatedTime()
+        let weather = displayedWeather()
+        let temperature = displayedTemperature()
+        let wind = displayedWind()
+        
+        return [networkState, city, updatedTime, weather, temperature, wind]
     }
 }
 

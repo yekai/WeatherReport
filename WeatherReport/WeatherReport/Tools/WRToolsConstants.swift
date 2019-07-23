@@ -9,3 +9,7 @@
 import UIKit
 
 let kCurrentThreadDatFormatter = "currentDateFormatter"
+let kWeatherReportCellIdentifier = "weatherReportCellIdentifier"
+let kWeatherReportTableViewInfoTag = 0xAAA
+let kWeatherReportTableViewInfoRows = 6
+let kWeatherReportTableViewCellHeight = 30.0

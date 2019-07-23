@@ -16,10 +16,10 @@ protocol WRDatabaseModelProtocol {
     func cityString() -> String
 }
 
-class WRDataBaseManager {
-    static var sharedInstance: WRDataBaseManager {
+class WRDatabaseClient {
+    static var sharedInstance: WRDatabaseClient {
         struct Singleton {
-            static let instance: WRDataBaseManager = WRDataBaseManager()
+            static let instance: WRDatabaseClient = WRDatabaseClient()
         }
         return Singleton.instance
     }

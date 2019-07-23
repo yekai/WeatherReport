@@ -10,7 +10,7 @@ import UIKit
 import Alamofire
 import SwiftyJSON
 
-class WRDALFactory: WRDALProtocol {
+class WRDALFactory {
     func request(weatherInfo city: String,
                  successHandler: @escaping (WRBasicModel) -> Void,
                  failureHandler: @escaping (Error?) -> Void) {
@@ -69,15 +69,19 @@ class WRDALFactory: WRDALProtocol {
     }
 }
 
-class WRDatabaseFactory: WRDALProtocol {
-    let databaseManager = WRDataBaseManager.sharedInstance
+class WRDatabaseFactory {
+    let databaseClient = WRDatabaseClient.sharedInstance
+    
+    init() {
+        databaseClient.register([WRDALModel(), WRCityModel()])
+    }
     
     func request(weatherInfo city: String,
                  successHandler: @escaping (WRBasicModel) -> Void,
                  failureHandler: @escaping (Error?) -> Void) {
         let model = WRDALModel()
         model.cityName = city
-        if let queryModel = databaseManager.query(model) {
+        if let queryModel = databaseClient.query(model) {
             let obj = WRDALModel(queryModel)
             successHandler(obj)
         } else {
@@ -86,7 +90,7 @@ class WRDatabaseFactory: WRDALProtocol {
     }
     
     func requestSupportedCityList() -> [WRCityModel] {
-        let queryList:[[String: Any]] = databaseManager.queryAll(WRCityModel())
+        let queryList:[[String: Any]] = databaseClient.queryAll(WRCityModel())
         var result:[WRCityModel] = [WRCityModel]()
         for dict in queryList {
             let obj = WRCityModel(dict)
@@ -97,14 +101,17 @@ class WRDatabaseFactory: WRDALProtocol {
     
     func saveSupportedCityList(_ models: [WRCityModel]) {
         for model in models {
-            let _ = databaseManager.saveObj(model)
+            let _ = databaseClient.saveObj(model)
         }
     }
-}
-
-enum WRDALSolution {
-    case Remote
-    case Database
+    
+    func queryCount(_ model: WRDatabaseModelProtocol) -> Int {
+        return databaseClient.queryCount(model)
+    }
+    
+    func saveObj(_ model: WRDatabaseModelProtocol) -> Bool {
+        return databaseClient.saveObj(model)
+    }
 }
 
 class WRDALManager {
@@ -118,9 +125,47 @@ class WRDALManager {
     private let remoteFactory = WRDALFactory()
     private let databaseFactory = WRDatabaseFactory()
     
+    init() {
+        saveLocalCityList()
+    }
+    
     func saveLocalCityList() {
-        let localCitiesList = remoteFactory.requestSupportedCityList()
-        databaseFactory.saveSupportedCityList(localCitiesList)
+        //there is a rule, we should not delete all the cities from cityList table if
+        //there may be functions for delete cities in later development
+        let count = databaseFactory.queryCount(WRCityModel())
+        if count == 0 {
+            let localCitiesList = remoteFactory.requestSupportedCityList()
+            databaseFactory.saveSupportedCityList(localCitiesList)
+        }
+    }
+    
+    func requestSupportedCityList() -> [WRCityModel]? {
+        return databaseFactory.requestSupportedCityList()
+    }
+    
+    func request(weatherInfo city: String,
+                 successHandler: @escaping (WRBasicModel) -> Void,
+                 failureHandler: @escaping (Error?) -> Void) {
+        let manager = NetworkReachabilityManager(host: kWeatherReportRequestURL)
+        manager?.listener = { status in
+            if status == .reachable(.ethernetOrWiFi) || status == .reachable(.wwan) {
+                self.remoteFactory.request(weatherInfo: city, successHandler: { (model) in
+                    if let weatherModel = model as? WRDALModel {
+                        successHandler(weatherModel)
+                        let _ = self.databaseFactory.saveObj(weatherModel)
+                    }
+                }, failureHandler: { (error) in
+                    failureHandler(error)
+                })
+            } else {
+                self.databaseFactory.request(weatherInfo: city, successHandler: { (model) in
+                    successHandler(model)
+                }, failureHandler: { (error) in
+                    failureHandler(error)
+                })
+            }
+        }
+        manager?.startListening()//开始监听网络
     }
 }
 

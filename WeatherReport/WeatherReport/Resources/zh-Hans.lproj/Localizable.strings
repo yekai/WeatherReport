@@ -8,3 +8,17 @@
 "com.city.Sydney" = "悉尼";
 "com.city.Melbourne" = "墨尔本";
 "com.city.Wollongong" = "伍伦贡";
+
+"com.main.title" = "城市天气预测";
+"com.main.warning" = "通知";
+"com.main.addCity.content" = "增加城市的功能正在开发中...";
+"com.main.warning.network.unavailable" = "对不起, 服务端不工作了, 也请您查看一下自己的网络状态, 谢谢";
+
+"com.main.weather.key.city" = "城市";
+"com.main.weather.key.updatedTime" = "更新时间";
+"com.main.weather.key.weather" = "天气";
+"com.main.weather.key.temperature" = "温度";
+"com.main.weather.key.wind" = "风速";
+"com.main.weather.key.networkMode" = "网络状况";
+"com.main.weather.value.onlineMode" = "在线模式";
+"com.main.weather.value.offlineMode" = "掉线模式";
