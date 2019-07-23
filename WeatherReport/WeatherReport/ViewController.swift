@@ -17,11 +17,13 @@ class ViewController: UIViewController {
     }
     
     func request() {
-        WRDALFactory().request(weatherInfo: "Sydney", successHandler: { (model) in
-            
-        }) { (error) in
-            
-        }
+//        WRDALFactory().request(weatherInfo: "Sydney", successHandler: { (model) in
+//
+//        }) { (error) in
+//
+//        }
+        let manager = WRDALManager.sharedInstance
+        manager.saveLocalCityList()
     }
 
 }

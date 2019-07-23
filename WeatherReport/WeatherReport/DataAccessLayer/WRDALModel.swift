@@ -70,6 +70,10 @@ class WRDALModel: WRBasicModel, WRDatabaseModelProtocol {
         return "unknown"
     }
     
+    func cityString() -> String {
+        return cityName
+    }
+    
     func sqlTableName() -> String {
         return "weatherReport"
     }
@@ -118,6 +122,10 @@ class WRCityModel: WRBasicModel, WRDatabaseModelProtocol {
     
     func displayedCityName() -> String {
         return WRLocalizeMgr.localize(localizeCityKey)
+    }
+    
+    func cityString() -> String {
+        return cityName
     }
     
     func sqlTableName() -> String {
