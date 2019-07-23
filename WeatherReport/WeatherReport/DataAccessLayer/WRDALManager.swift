@@ -155,7 +155,11 @@ class WRDALManager {
                         let _ = self.databaseFactory.saveObj(weatherModel)
                     }
                 }, failureHandler: { (error) in
-                    failureHandler(error)
+                    self.databaseFactory.request(weatherInfo: city, successHandler: { (model) in
+                        successHandler(model)
+                    }, failureHandler: { (error) in
+                        failureHandler(error)
+                    })
                 })
             } else {
                 self.databaseFactory.request(weatherInfo: city, successHandler: { (model) in
@@ -165,7 +169,7 @@ class WRDALManager {
                 })
             }
         }
-        manager?.startListening()//开始监听网络
+        manager?.startListening()
     }
 }
 

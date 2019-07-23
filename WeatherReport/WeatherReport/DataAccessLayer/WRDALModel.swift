@@ -101,6 +101,10 @@ class WRDALModel: WRBasicModel, WRDatabaseModelProtocol {
         return "'\(id)','\(cityName)','\(updatedTime)','\(weather)','\(temperature)','\(wind)'"
     }
     
+    func sqlTableOrderBy() -> String? {
+        return "ORDER BY updatedTime DESC"
+    }
+    
     func displayedKeys() -> [String] {
         let networkState = WRLocalizeMgr.localize("com.main.weather.key.networkMode")
         let city = WRLocalizeMgr.localize("com.main.weather.key.city")
@@ -156,6 +160,10 @@ class WRCityModel: WRBasicModel, WRDatabaseModelProtocol {
     
     func sqlTableName() -> String {
         return "cityList"
+    }
+    
+    func sqlTableOrderBy() -> String? {
+        return nil
     }
     
     func sqlTableString() -> String {

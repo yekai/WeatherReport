@@ -14,6 +14,7 @@ protocol WRDatabaseModelProtocol {
     func sqlTableKeys() -> String
     func sqlTableValues() -> String
     func cityString() -> String
+    func sqlTableOrderBy() -> String?
 }
 
 class WRDatabaseClient {
@@ -70,7 +71,11 @@ class WRDatabaseClient {
     func query(_ model: WRDatabaseModelProtocol) -> [String: Any]? {
         var resultModel: [[String: Any]] = [[String: Any]]()
         self.dbQueue.inDatabase { (db) in
-            let executeSql = "SELECT * FROM \(model.sqlTableName()) WHERE cityName='\(model.cityString())';"
+            var executeSql = "SELECT * FROM \(model.sqlTableName()) WHERE cityName='\(model.cityString())'"
+            if let sqlOrderBy = model.sqlTableOrderBy() {
+                executeSql = "\(executeSql) \(sqlOrderBy)"
+            }
+            executeSql = "\(executeSql);"
             let result:FMResultSet = try! db.executeQuery(executeSql, values: nil)
             
             while(result.next()) {

@@ -10,6 +10,7 @@ import UIKit
 import iOSDropDown
 
 class WRMainViewController: UIViewController {
+    @IBOutlet weak var weatherTitleLbl: UILabel!
     @IBOutlet weak var weatherInfoTable: UITableView!
     @IBOutlet weak var maincityListDropDown: DropDown!
     var currentDisplayedWeatherModel: WRDALModel?
@@ -37,6 +38,29 @@ class WRMainViewController: UIViewController {
         weatherInfoTable.isScrollEnabled = false
         weatherInfoTable.tag = kWeatherReportTableViewInfoTag
         weatherInfoTable.rowHeight = CGFloat(kWeatherReportTableViewCellHeight)
+        self.edgesForExtendedLayout = []
+        self.navigationController?.navigationBar.isTranslucent = false;
+        initConstraints()
+    }
+    
+    func initConstraints() {
+        weatherTitleLbl.mas_makeConstraints{ (make) in
+            make?.centerX.offset()(0)
+            make?.height.offset()(50)
+            make?.top.offset()(0)
+        }
+        maincityListDropDown.mas_makeConstraints { (make) in
+            make?.centerX.offset()(0)
+            make?.height.offset()(40)
+            make?.top.equalTo()(weatherTitleLbl)?.offset()(50)
+            make?.leading.offset()(40)
+        }
+        weatherInfoTable.mas_makeConstraints { (make) in
+            make?.centerX.offset()(0)
+            make?.height.offset()(180)
+            make?.top.equalTo()(maincityListDropDown)?.offset()(50)
+            make?.leading.offset()(40)
+        }
     }
     
     @objc func addCity() {

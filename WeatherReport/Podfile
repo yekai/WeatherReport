@@ -11,7 +11,8 @@ target 'WeatherReport' do
   pod 'ReactiveSwift', '~> 5.0'
   pod 'FMDB'
   pod 'iOSDropDown'
-
+  pod 'Masonry'
+  
   target 'WeatherReportTests' do
     inherit! :search_paths
     # Pods for testing
