@@ -10,6 +10,9 @@ import UIKit
 import CoreFoundation
 
 extension String {
+    //This is a optimization for the date formatter that will cose a
+    //lot of time while creation, so set it in a safe thread dictionary
+    //and we can get the formatter point conviniently
     func currentFormat() -> DateFormatter {
         let threadDict = Thread.current.threadDictionary
         if let formatter = threadDict[kCurrentThreadDatFormatter] {
@@ -31,6 +34,7 @@ extension String {
         return dateFrom(format: "yyyy-MM-dd HH:mm:ss")
     }
     
+    //create one unique id from String
     static func uniqueID() -> String {
         let cfuuid: CFUUID = CFUUIDCreate(kCFAllocatorDefault)
         let id: String = CFUUIDCreateString(kCFAllocatorDefault, cfuuid) as String? ?? ""

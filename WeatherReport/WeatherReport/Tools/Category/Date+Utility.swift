@@ -9,7 +9,9 @@
 import UIKit
 
 extension Date {
-    
+    //This is a optimization for the date formatter that will cose a
+    //lot of time while creation, so set it in a safe thread dictionary
+    //and we can get the formatter point conviniently
     func currentFormat() -> DateFormatter {
         let threadDict = Thread.current.threadDictionary
         if let formatter = threadDict[kCurrentThreadDatFormatter] {

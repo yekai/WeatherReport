@@ -13,6 +13,12 @@ class WeatherInfoTableViewCell: UITableViewCell {
     @IBOutlet weak var weatherKeylabel: UILabel!
     @IBOutlet weak var weatherContentLabel: UILabel!
     
+    /**
+     * display cell info
+     * key: key info, for example: city Name
+     * value: value infom for example: Sydney
+     * highlight: whether highlight this row since it will be more important info
+     **/
     func configureValue(forCell key: String, value: String, highlight: Bool) {
         weatherKeylabel.text = key
         weatherContentLabel.text = value

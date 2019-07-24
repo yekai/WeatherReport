@@ -8,6 +8,9 @@
 
 import UIKit
 
+/**
+ * used to internationalize the apps data
+ **/
 class WRLocalizeMgr {
     class func localize(_ key: String) -> String {
         return NSLocalizedString(key, comment: "")

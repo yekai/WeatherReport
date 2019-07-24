@@ -9,6 +9,13 @@
 import UIKit
 import Alamofire
 
+/**
+ * This is a deep network layer for our apps
+ * which is used to get remote data through Alamofire
+ * and then transform the json data to one WRBasicModel
+ * success handler and fail handler can deal with this model
+ * directly
+ **/
 class WRDALHttpClient {
     class func request(_ url: String,
                        method: HTTPMethod = .get,
@@ -25,9 +32,12 @@ class WRDALHttpClient {
             .responseJSON { (response) in
                 switch response.result {
                 case .success:
+                    //format handler is used to transform the json data to WRBasicModel
                     let basicModel: WRBasicModel = formatterHandler(response.result.value)
+                    //deal with model in success handler
                     successHandler(basicModel)
                 case .failure:
+                    //deal with error in fail handler
                     failureHandler(response.result.error)
                 }
         }

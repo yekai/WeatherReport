@@ -8,24 +8,45 @@
 
 import UIKit
 
+/**
+ * this protocol is used to receive
+ * related database info from model
+ * all models cached in database should
+ * implement this protocol
+ **/
 protocol WRDatabaseModelProtocol {
+    //table name
     func sqlTableName() -> String
+    //create table sql string
     func sqlTableString() -> String
+    //insert or update table all keys
     func sqlTableKeys() -> String
+    //insert or update table all values
     func sqlTableValues() -> String
+    //current model city name
     func cityString() -> String
+    //query table order by parameter
     func sqlTableOrderBy() -> String?
 }
 
+/**
+ * This is a deep databse layer for our apps
+ * it contains all models simple save, delete
+ * update, query operation for all models, it
+ * is used to cache all model data and display
+ * cache info while network is offline mode
+ **/
 class WRDatabaseClient {
+    //Singleton design pattern
     static var sharedInstance: WRDatabaseClient {
         struct Singleton {
             static let instance: WRDatabaseClient = WRDatabaseClient()
         }
         return Singleton.instance
     }
-    
+    //the sqlite database stored path
     private var dbPath: String
+    //the sqlite databse queue executor
     private var dbQueue: FMDatabaseQueue
     
     init() {
@@ -34,10 +55,13 @@ class WRDatabaseClient {
         self.dbQueue = FMDatabaseQueue(path:dbPath)!
     }
     
+    //confirm the database whether owns the initialed tables
     func isDatabaseAvailable() -> Bool {
+        //confirm the database path created
         let pathAvailable = FileManager.default.fileExists(atPath: self.dbPath)
         var count = 0;
         if pathAvailable {
+            //confirm the tables created
             self.dbQueue.inDatabase { (db) in
                 let result: FMResultSet = try! db.executeQuery("SELECT count(*) FROM sqlite_master where type='table';", values: nil)
                 while result.next() {
@@ -49,6 +73,7 @@ class WRDatabaseClient {
         return pathAvailable && count > 0
     }
     
+    //create tables for all related models
     func register(_ models: [WRDatabaseModelProtocol]) {
         if !isDatabaseAvailable() {
             for protocolObj in models {
@@ -59,6 +84,7 @@ class WRDatabaseClient {
         }
     }
     
+    //save one model data in databse
     func saveObj(_ model: WRDatabaseModelProtocol) -> Bool {
         var res = true
         self.dbQueue.inDatabase { (db) in
@@ -68,6 +94,7 @@ class WRDatabaseClient {
         return res
     }
     
+    //query one model data info from database
     func query(_ model: WRDatabaseModelProtocol) -> [String: Any]? {
         var resultModel: [[String: Any]] = [[String: Any]]()
         self.dbQueue.inDatabase { (db) in
@@ -89,6 +116,7 @@ class WRDatabaseClient {
         return nil
     }
     
+    //query all data model info from database
     func queryAll(_ model: WRDatabaseModelProtocol) -> [[String: Any]] {
         var resultModel: [[String: Any]] = [[String: Any]]()
         self.dbQueue.inDatabase { (db) in
@@ -103,6 +131,7 @@ class WRDatabaseClient {
         return resultModel
     }
     
+    //query all model data count number in database
     func queryCount(_ model: WRDatabaseModelProtocol) -> Int {
         var count = 0
         self.dbQueue.inDatabase { (db) in
