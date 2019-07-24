@@ -18,12 +18,30 @@ class WRBasicModel: NSObject {
     
 }
 
-class WRDALModel: WRBasicModel, WRDatabaseModelProtocol {
+class WRDALModel: WRBasicModel {
     var cityName: String
     var updatedTime: Date
     var weather: String?
     var temperature: String?
     var wind: String?
+    var displayedUpdatedTime: String {
+        return updatedTime.stringOfEEEEHHMMAA() ?? ""
+    }
+    var displayedWeather: String {
+        return weather ?? "unknown"
+    }
+    var displayedTemperature: String {
+        if let temperature = temperature {
+            return "\(temperature)°C"
+        }
+        return "unknown"
+    }
+    var displayedWind: String {
+        if let wind = wind {
+            return "\(wind)km/h"
+        }
+        return "unknown"
+    }
     
     init(_ id: String, cityName: String, updatedTime: Date, weather: String?, temperature: String?, wind: String?) {
         self.cityName = cityName
@@ -48,28 +66,30 @@ class WRDALModel: WRBasicModel, WRDatabaseModelProtocol {
         self.init(id, cityName: cityName, updatedTime: updatedTime, weather: weather, temperature: temperature, wind: wind)
     }
     
-    func displayedUpdatedTime() -> String {
-        return updatedTime.stringOfEEEEHHMMAA() ?? ""
+    func displayedKeys() -> [String] {
+        let networkState = WRLocalizeMgr.localize("com.main.weather.key.networkMode")
+        let city = WRLocalizeMgr.localize("com.main.weather.key.city")
+        let updatedTime = WRLocalizeMgr.localize("com.main.weather.key.updatedTime")
+        let weather = WRLocalizeMgr.localize("com.main.weather.key.weather")
+        let temperature = WRLocalizeMgr.localize("com.main.weather.key.temperature")
+        let wind = WRLocalizeMgr.localize("com.main.weather.key.wind")
+        
+        return [networkState, city, updatedTime, weather, temperature, wind]
     }
     
-    func displayedWeather() -> String {
-        return weather ?? "unknown"
+    func displayedValues(_ netState: String, cityDisplayedValue: String) -> [String] {
+        let networkState = netState
+        let city = cityDisplayedValue
+        let updatedTime = displayedUpdatedTime
+        let weather = displayedWeather
+        let temperature = displayedTemperature
+        let wind = displayedWind
+        
+        return [networkState, city, updatedTime, weather, temperature, wind]
     }
-    
-    func displayedTemperature() -> String {
-        if let temperature = temperature {
-            return "\(temperature)°C"
-        }
-        return "unknown"
-    }
-    
-    func displayedWind() -> String {
-        if let wind = wind {
-            return "\(wind)km/h"
-        }
-        return "unknown"
-    }
-    
+}
+
+extension WRDALModel: WRDatabaseModelProtocol {
     func cityString() -> String {
         return cityName
     }
@@ -81,11 +101,11 @@ class WRDALModel: WRBasicModel, WRDatabaseModelProtocol {
     func sqlTableString() -> String {
         return """
         CREATE TABLE IF NOT EXISTS \(sqlTableName()) (id text PRIMARY KEY,
-                                                      cityName text NOT NULL,
-                                                      updatedTime DateTime NOT NULL,
-                                                      weather text NOT NULL,
-                                                      temperature text NOT NULL,
-                                                      wind text NOT NULL)
+        cityName text NOT NULL,
+        updatedTime DateTime NOT NULL,
+        weather text NOT NULL,
+        temperature text NOT NULL,
+        wind text NOT NULL)
         """
     }
     
@@ -104,33 +124,14 @@ class WRDALModel: WRBasicModel, WRDatabaseModelProtocol {
     func sqlTableOrderBy() -> String? {
         return "ORDER BY updatedTime DESC"
     }
-    
-    func displayedKeys() -> [String] {
-        let networkState = WRLocalizeMgr.localize("com.main.weather.key.networkMode")
-        let city = WRLocalizeMgr.localize("com.main.weather.key.city")
-        let updatedTime = WRLocalizeMgr.localize("com.main.weather.key.updatedTime")
-        let weather = WRLocalizeMgr.localize("com.main.weather.key.weather")
-        let temperature = WRLocalizeMgr.localize("com.main.weather.key.temperature")
-        let wind = WRLocalizeMgr.localize("com.main.weather.key.wind")
-        
-        return [networkState, city, updatedTime, weather, temperature, wind]
-    }
-    
-    func displayedValues(_ netState: String, cityDisplayedValue: String) -> [String] {
-        let networkState = netState
-        let city = cityDisplayedValue
-        let updatedTime = displayedUpdatedTime()
-        let weather = displayedWeather()
-        let temperature = displayedTemperature()
-        let wind = displayedWind()
-        
-        return [networkState, city, updatedTime, weather, temperature, wind]
-    }
 }
 
-class WRCityModel: WRBasicModel, WRDatabaseModelProtocol {
+class WRCityModel: WRBasicModel {
     var cityName: String
     var localizeCityKey: String
+    var displayedCityName: String {
+        return WRLocalizeMgr.localize(localizeCityKey)
+    }
     
     init(_ id: String, cityName: String, localizeCityKey: String) {
         self.cityName = cityName
@@ -149,11 +150,9 @@ class WRCityModel: WRBasicModel, WRDatabaseModelProtocol {
         let localizeCityKey = dict["localizeCityKey"] as! String
         self.init(id, cityName: cityName, localizeCityKey: localizeCityKey)
     }
-    
-    func displayedCityName() -> String {
-        return WRLocalizeMgr.localize(localizeCityKey)
-    }
-    
+}
+
+extension WRCityModel: WRDatabaseModelProtocol {
     func cityString() -> String {
         return cityName
     }
@@ -169,8 +168,8 @@ class WRCityModel: WRBasicModel, WRDatabaseModelProtocol {
     func sqlTableString() -> String {
         return """
         CREATE TABLE IF NOT EXISTS \(sqlTableName()) (id text PRIMARY KEY,
-                                                      cityName text NOT NULL,
-                                                      localizeCityKey text NOT NULL)
+        cityName text NOT NULL,
+        localizeCityKey text NOT NULL)
         """
     }
     

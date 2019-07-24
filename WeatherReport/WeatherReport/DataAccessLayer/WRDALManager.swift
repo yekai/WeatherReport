@@ -72,8 +72,10 @@ class WRDALFactory {
 class WRDatabaseFactory {
     let databaseClient = WRDatabaseClient.sharedInstance
     
-    func registerModels() {
-        self.databaseClient.register([WRDALModel(), WRCityModel()])
+    init() {
+//        DispatchQueue.global().async {
+            self.databaseClient.register([WRDALModel(), WRCityModel()])
+//        }
     }
     
     func request(weatherInfo city: String,
@@ -126,11 +128,12 @@ class WRDALManager {
     private let databaseFactory = WRDatabaseFactory()
     
     init() {
-        saveLocalCityList()
+//        DispatchQueue.global().async {
+            self.saveLocalCityList()
+//        }
     }
     
     func saveLocalCityList() {
-        databaseFactory.registerModels()
         //there is a rule, we should not delete all the cities from cityList table if
         //there may be functions for delete cities in later development
         let count = databaseFactory.queryCount(WRCityModel())
