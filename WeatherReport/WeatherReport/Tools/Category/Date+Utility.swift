@@ -29,10 +29,6 @@ extension Date {
         return currentFormatter.string(from: self)
     }
     
-    func stringOfYYYYMMDD() -> String? {
-        return stringFrom(format: "yyyy-MM-dd")
-    }
-    
     func stringOfYYYYMMDDHHMMSS() -> String? {
         return stringFrom(format: "yyyy-MM-dd HH:mm:ss")
     }

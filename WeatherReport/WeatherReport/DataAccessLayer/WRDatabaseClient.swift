@@ -9,27 +9,6 @@
 import UIKit
 
 /**
- * this protocol is used to receive
- * related database info from model
- * all models cached in database should
- * implement this protocol
- **/
-protocol WRDatabaseModelProtocol {
-    //table name
-    func sqlTableName() -> String
-    //create table sql string
-    func sqlTableString() -> String
-    //insert or update table all keys
-    func sqlTableKeys() -> String
-    //insert or update table all values
-    func sqlTableValues() -> String
-    //current model city name
-    func cityString() -> String
-    //query table order by parameter
-    func sqlTableOrderBy() -> String?
-}
-
-/**
  * This is a deep databse layer for our apps
  * it contains all models simple save, delete
  * update, query operation for all models, it
@@ -53,6 +32,15 @@ class WRDatabaseClient {
         let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
         self.dbPath = "\(path)/weatherReport.sqlite"
         self.dbQueue = FMDatabaseQueue(path:dbPath)!
+    }
+    
+    convenience init(forTest: Bool) {
+        self.init()
+        if forTest {
+            let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
+            self.dbPath = "\(path)/weatherReportTest.sqlite"
+            self.dbQueue = FMDatabaseQueue(path:dbPath)!
+        }
     }
     
     //confirm the database whether owns the initialed tables

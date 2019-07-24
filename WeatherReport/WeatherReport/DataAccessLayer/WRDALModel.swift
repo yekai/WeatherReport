@@ -9,6 +9,27 @@
 import UIKit
 
 /**
+ * this protocol is used to receive
+ * related database info from model
+ * all models cached in database should
+ * implement this protocol
+ **/
+protocol WRDatabaseModelProtocol {
+    //table name
+    func sqlTableName() -> String
+    //create table sql string
+    func sqlTableString() -> String
+    //insert or update table all keys
+    func sqlTableKeys() -> String
+    //insert or update table all values
+    func sqlTableValues() -> String
+    //current model city name
+    func cityString() -> String
+    //query table order by parameter
+    func sqlTableOrderBy() -> String?
+}
+
+/**
  * This is a basic model for all apps
  * all other data mode from remote should
  * extend from this class, we can get parsed
