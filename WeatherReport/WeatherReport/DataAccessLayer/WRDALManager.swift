@@ -212,6 +212,29 @@ class WRDALManager {
         }
         manager?.startListening()
     }
+    
+    //store the remote data into database, do nothing for other exceptions
+    func store(weatherInfo city: String) {
+        //confirm the network ability while each request from remote
+        let manager = NetworkReachabilityManager(host: kWeatherReportRequestURL)
+        manager?.listener = { status in
+            //if the network is reachable, we can get the data from remote
+            if status == .reachable(.ethernetOrWiFi) || status == .reachable(.wwan) {
+                self.remoteFactory.request(weatherInfo: city, successHandler: { (model) in
+                    // do all the operation in global queue
+                    DispatchQueue.global().async {
+                        if let weatherModel = model as? WRDALModel {
+                            //while the remote data is received, store this model in database
+                            let _ = self.databaseFactory.saveObj(weatherModel)
+                        }
+                    }
+                }, failureHandler: { (error) in
+                    //do nothing
+                })
+            }
+        }
+        manager?.startListening()
+    }
 }
 
 

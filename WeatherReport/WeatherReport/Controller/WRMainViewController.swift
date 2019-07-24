@@ -18,10 +18,21 @@ class WRMainViewController: UIViewController {
     @IBOutlet weak var maincityListDropDown: DropDown!
     //MVP design pattern, Presenter
     var presenter: WRMainViewPresenter?
+    var taskManager: WRTimeTaskManager = WRTimeTaskManager()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         commonInit()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        taskManager.fire()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        taskManager.invalidate()
     }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -125,7 +136,6 @@ class WRMainViewController: UIViewController {
         alertController.addAction(UIAlertAction(title: "Go", style: UIAlertAction.Style.default, handler: nil))
         self.present(alertController, animated: true, completion: nil)
     }
-    
 }
 
 extension WRMainViewController: UITableViewDelegate, UITableViewDataSource {

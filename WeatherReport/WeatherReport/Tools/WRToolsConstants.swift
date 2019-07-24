@@ -13,3 +13,4 @@ let kWeatherReportCellIdentifier = "weatherReportCellIdentifier"
 let kWeatherReportTableViewInfoTag = 0xAAA
 let kWeatherReportTableViewInfoRows = 6
 let kWeatherReportTableViewCellHeight = 30.0
+let kWeatherReportFetchDataTime = 300
