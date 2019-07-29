@@ -39,9 +39,9 @@ class WRTimeTaskManager {
     
     @objc func fetchWeatherData() {
         DispatchQueue.global().async {
-            for city in self.availableCities {
+            self.availableCities.forEach({ (city) in
                 self.dalManager.store(weatherInfo: city)
-            }
+            })
         }
     }
 }

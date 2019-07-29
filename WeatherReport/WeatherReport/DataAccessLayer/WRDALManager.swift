@@ -123,7 +123,7 @@ fileprivate class WRDatabaseFactory: WRDALDatabaseProtocol {
     }
     //save local initialed city list in database
     func saveSupportedCityList(_ models: [WRCityModel]) {
-        for model in models {
+        models.forEach { (model) in
             let _ = databaseClient.saveObj(model)
         }
     }

@@ -64,7 +64,7 @@ class WRDatabaseClient {
     //create tables for all related models
     func register(_ models: [WRDatabaseModelProtocol]) {
         if !isDatabaseAvailable() {
-            for protocolObj in models {
+            models.forEach { (protocolObj) in
                 self.dbQueue.inDatabase { (db) in
                     try! db.executeUpdate(protocolObj.sqlTableString(), values: nil)
                 }
