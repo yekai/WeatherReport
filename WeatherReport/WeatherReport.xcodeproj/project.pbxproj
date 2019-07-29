@@ -35,6 +35,7 @@
 		5B6B82DF22E82AF700C6E7C5 /* WeatherInfoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B6B82D222E6D16E00C6E7C5 /* WeatherInfoTableViewCell.swift */; };
 		5B6B82E422E84A7300C6E7C5 /* WeatherReportClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B6B82E322E84A7300C6E7C5 /* WeatherReportClientTests.swift */; };
 		5B6B82E622E8760600C6E7C5 /* WRTimeTaskManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B6B82E522E8760600C6E7C5 /* WRTimeTaskManager.swift */; };
+		5B6B82E822EE810000C6E7C5 /* WRDALProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B6B82E722EE810000C6E7C5 /* WRDALProtocol.swift */; };
 		5F410809C540489A4DB00240 /* Pods_WeatherReportUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 775429F2418EE29E7E332EC5 /* Pods_WeatherReportUITests.framework */; };
 /* End PBXBuildFile section */
 
@@ -96,6 +97,7 @@
 		5B6B82D422E7F5E800C6E7C5 /* WRMainViewPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WRMainViewPresenter.swift; sourceTree = "<group>"; };
 		5B6B82E322E84A7300C6E7C5 /* WeatherReportClientTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeatherReportClientTests.swift; sourceTree = "<group>"; };
 		5B6B82E522E8760600C6E7C5 /* WRTimeTaskManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WRTimeTaskManager.swift; sourceTree = "<group>"; };
+		5B6B82E722EE810000C6E7C5 /* WRDALProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WRDALProtocol.swift; sourceTree = "<group>"; };
 		6169A39EE82487EDE6CD6F11 /* Pods-WeatherReportTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WeatherReportTests.debug.xcconfig"; path = "Target Support Files/Pods-WeatherReportTests/Pods-WeatherReportTests.debug.xcconfig"; sourceTree = "<group>"; };
 		775429F2418EE29E7E332EC5 /* Pods_WeatherReportUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WeatherReportUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B1D8D70CC9E0EAFB2480B693 /* Pods-WeatherReportUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WeatherReportUITests.debug.xcconfig"; path = "Target Support Files/Pods-WeatherReportUITests/Pods-WeatherReportUITests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -224,6 +226,7 @@
 			isa = PBXGroup;
 			children = (
 				5B6B82AB22E5650000C6E7C5 /* WRDALConstants.swift */,
+				5B6B82E722EE810000C6E7C5 /* WRDALProtocol.swift */,
 				5B6B82B122E5837700C6E7C5 /* WRDALManager.swift */,
 				5B6B82B322E5893F00C6E7C5 /* WRDALModel.swift */,
 				5B6B82BB22E5906100C6E7C5 /* WRDALHttpClient.swift */,
@@ -534,6 +537,7 @@
 				5B6B82D322E6D16E00C6E7C5 /* WeatherInfoTableViewCell.swift in Sources */,
 				5B6B82D122E6C77F00C6E7C5 /* DropDown+Utility.swift in Sources */,
 				5B6B82C222E5B53600C6E7C5 /* WRDatabaseClient.swift in Sources */,
+				5B6B82E822EE810000C6E7C5 /* WRDALProtocol.swift in Sources */,
 				5B6B82AC22E5650000C6E7C5 /* WRDALConstants.swift in Sources */,
 				5B6B82B422E5893F00C6E7C5 /* WRDALModel.swift in Sources */,
 				4D7C36AC22E5F95800D894F1 /* String+Utility.swift in Sources */,
@@ -738,16 +742,17 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 6S4C96UL95;
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = TPXMNBN2HM;
 				INFOPLIST_FILE = WeatherReport/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.testOrg.www.WeatherReport;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lonch.CloudOffice.Trial;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = CloudOfficeTrial_Profile_Develop;
 				SWIFT_OBJC_BRIDGING_HEADER = "WeatherReport/Resources/WeatherReport-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.2;
@@ -761,16 +766,17 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 6S4C96UL95;
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = TPXMNBN2HM;
 				INFOPLIST_FILE = WeatherReport/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.testOrg.www.WeatherReport;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lonch.CloudOffice.Trial;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = CloudOfficeTrial_Profile_Develop;
 				SWIFT_OBJC_BRIDGING_HEADER = "WeatherReport/Resources/WeatherReport-Bridging-Header.h";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";

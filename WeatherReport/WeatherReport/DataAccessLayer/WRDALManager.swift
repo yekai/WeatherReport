@@ -17,7 +17,7 @@ import SwiftyJSON
  * we can distingush these requests through swift extension
  * set one each request and format hanlder in one extension
  **/
-class WRDALFactory {
+fileprivate class WRDALFactory: WRDALHttpProtocol {
     /**
      * request weather info from remote
      * city: city name
@@ -93,7 +93,7 @@ class WRDALFactory {
  * we can distingush these requests through swift extension
  * set one each request and format hanlder in one extension
  **/
-class WRDatabaseFactory {
+fileprivate class WRDatabaseFactory: WRDALDatabaseProtocol {
     private let databaseClient = WRDatabaseClient.sharedInstance
     
     //initial all cached database table while factory creation
@@ -155,8 +155,8 @@ class WRDALManager {
         return Singleton.instance
     }
     
-    private let remoteFactory = WRDALFactory()
-    private let databaseFactory = WRDatabaseFactory()
+    private let remoteFactory: WRDALHttpProtocol = WRDALFactory()
+    private let databaseFactory: WRDALDatabaseProtocol = WRDatabaseFactory()
     
     init() {
         saveLocalCityList()
