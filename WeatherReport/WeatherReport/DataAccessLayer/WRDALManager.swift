@@ -31,9 +31,9 @@ fileprivate class WRDALFactory: WRDALHttpProtocol {
         parameters["city"] = city
         WRDALHttpClient.request(kWeatherReportRequestURL,
                                 parameters:parameters,
-                                formatterHandler: { (response) -> WRBasicModel in
+                                formatterHandler: { [weak self] (response) -> WRBasicModel in
                                     //format json to WRDALModel
-                                    return self.formattedWRDALModel(city, dataObj: response)
+                                    return (self?.formattedWRDALModel(city, dataObj: response))!
         }, successHandler: { (model) in
             if model.successModel {
                 successHandler(model)
@@ -184,12 +184,12 @@ class WRDALManager {
         manager?.listener = { status in
             //if the network is reachable, we can get the data from remote
             if status == .reachable(.ethernetOrWiFi) || status == .reachable(.wwan) {
-                self.remoteFactory.request(weatherInfo: city, successHandler: { (model) in
+                self.remoteFactory.request(weatherInfo: city, successHandler: { [weak self] (model) in
                     if let weatherModel = model as? WRDALModel {
                         //while the remote data is received, deal with in success handler
                         successHandler(weatherModel)
                         //and then store this model in database
-                        let _ = self.databaseFactory.saveObj(weatherModel)
+                        let _ = self?.databaseFactory.saveObj(weatherModel)
                     }
                 }, failureHandler: { (error) in
                     //if remote happens error and the nget the data from database
@@ -220,12 +220,12 @@ class WRDALManager {
         manager?.listener = { status in
             //if the network is reachable, we can get the data from remote
             if status == .reachable(.ethernetOrWiFi) || status == .reachable(.wwan) {
-                self.remoteFactory.request(weatherInfo: city, successHandler: { (model) in
+                self.remoteFactory.request(weatherInfo: city, successHandler: { [weak self] (model) in
                     // do all the operation in global queue
                     DispatchQueue.global().async {
                         if let weatherModel = model as? WRDALModel {
                             //while the remote data is received, store this model in database
-                            let _ = self.databaseFactory.saveObj(weatherModel)
+                            let _ = self?.databaseFactory.saveObj(weatherModel)
                         }
                     }
                 }, failureHandler: { (error) in

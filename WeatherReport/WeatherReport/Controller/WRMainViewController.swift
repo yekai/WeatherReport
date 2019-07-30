@@ -95,7 +95,7 @@ class WRMainViewController: UIViewController {
         let content = WRLocalizeMgr.localize("com.main.addCity.content")
         let alertController = UIAlertController(title: title, message: content, preferredStyle: UIAlertController.Style.alert)
         alertController.addAction(UIAlertAction(title: "Go", style: UIAlertAction.Style.default, handler: nil))
-        self.present(alertController, animated: true, completion: nil)
+        present(alertController, animated: true, completion: nil)
     }
     
     func configureDropDownCityList() {
@@ -114,15 +114,15 @@ class WRMainViewController: UIViewController {
         //we can get the selected index fromdrop down selector, and then
         //we need to get the city name to receive the weather info from remote
         presenter?.requestWeatherInfo(selectedIndex: selectedIndex,
-                                     successHandler: {
+                                      successHandler: { [weak self] () in
                                         //while we get the weather data, reload table view to display weather info
-                                        self.weatherInfoTable.isHidden = false
-                                        self.weatherInfoTable.reloadData()
+                                        self?.weatherInfoTable.isHidden = false
+                                        self?.weatherInfoTable.reloadData()
         },
-                                     failureHandler: { (error) in
+                                     failureHandler: { [weak self] (error) in
                                         //this is the only error displayed for customer, need to do more work on
                                         //the error
-                                        self.showNetworkUnavailable()
+                                        self?.showNetworkUnavailable()
         })
     }
     
@@ -135,7 +135,7 @@ class WRMainViewController: UIViewController {
         let content = WRLocalizeMgr.localize("com.main.warning.network.unavailable")
         let alertController = UIAlertController(title: title, message: content, preferredStyle: UIAlertController.Style.alert)
         alertController.addAction(UIAlertAction(title: "Go", style: UIAlertAction.Style.default, handler: nil))
-        self.present(alertController, animated: true, completion: nil)
+        present(alertController, animated: true, completion: nil)
     }
 }
 

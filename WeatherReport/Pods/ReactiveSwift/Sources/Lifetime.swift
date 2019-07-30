@@ -86,8 +86,7 @@ extension Lifetime {
 }
 
 extension Lifetime {
-	/// A token object which completes its associated `Lifetime` when
-	/// it deinitializes, or when `dispose()` is called.
+	/// A token object which completes its signal when it deinitializes.
 	///
 	/// It is generally used in conjuncion with `Lifetime` as a private
 	/// deinitialization trigger.
@@ -98,18 +97,15 @@ extension Lifetime {
 	/// }
 	/// ```
 	public final class Token {
+		/// A signal that sends a Completed event when the lifetime ends.
 		fileprivate let disposables: CompositeDisposable
 
 		public init() {
 			disposables = CompositeDisposable()
 		}
 
-		public func dispose() {
-			disposables.dispose()
-		}
-
 		deinit {
-			dispose()
+			disposables.dispose()
 		}
 	}
 }

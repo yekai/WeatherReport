@@ -1,6 +1,5 @@
 import Foundation
 import Result
-import Dispatch
 
 /// A push-driven stream that sends Events over time, parameterized by the type
 /// of values being sent (`Value`) and the type of failure that can occur
@@ -558,16 +557,6 @@ extension Signal {
 	public func map<U>(_ transform: @escaping (Value) -> U) -> Signal<U, Error> {
 		return flatMapEvent(Signal.Event.map(transform))
 	}
-	
-	/// Map each value in the signal to a new constant value.
-	///
-	/// - parameters:
-	///   - value: A new value.
-	///
-	/// - returns: A signal that will send new values.
-	public func map<U>(value: U) -> Signal<U, Error> {
-		return map { _ in value }
-	}
 
 	/// Map each value in the signal to a new value by applying a key path.
 	///
@@ -766,28 +755,6 @@ extension Signal {
 		return flatMapEvent(Signal.Event.collect(shouldEmit))
 	}
 
-	/// Forward the latest values on `scheduler` every `interval`.
-	///
-	/// - note: If `self` terminates while values are being accumulated,
-	///         the behaviour will be determined by `discardWhenCompleted`.
-	///         If `true`, the values will be discarded and the returned signal
-	///         will terminate immediately.
-	///         If `false`, that values will be delivered at the next interval.
-	///
-	/// - parameters:
-	///   - interval: A repetition interval.
-	///   - scheduler: A scheduler to send values on.
-	///   - skipEmpty: Whether empty arrays should be sent if no values were
-	///     accumulated during the interval.
-	///   - discardWhenCompleted: A boolean to indicate if the latest unsent
-	///     values should be discarded on completion.
-	///
-	/// - returns: A signal that sends all values that are sent from `self` at
-	///            `interval` seconds apart.
-	public func collect(every interval: DispatchTimeInterval, on scheduler: DateScheduler, skipEmpty: Bool = false, discardWhenCompleted: Bool = true) -> Signal<[Value], Error> {
-		return flatMapEvent(Signal.Event.collect(every: interval, on: scheduler, skipEmpty: skipEmpty, discardWhenCompleted: discardWhenCompleted))
-	}
-
 	/// Forward all events onto the given scheduler, instead of whichever
 	/// scheduler they originally arrived upon.
 	///
@@ -820,17 +787,6 @@ extension Signal {
 	///            and given signal.
 	public func combineLatest<U>(with other: Signal<U, Error>) -> Signal<(Value, U), Error> {
 		return Signal.combineLatest(self, other)
-	}
-	
-	/// Merge the given signal into a single `Signal` that will emit all
-	/// values from both of them, and complete when all of them have completed.
-	///
-	/// - parameters:
-	///   - other: A signal to merge `self`'s value with.
-	///
-	/// - returns: A signal that sends all values of `self` and given signal.
-	public func merge(with other: Signal<Value, Error>) -> Signal<Value, Error> {
-		return Signal.merge(self, other)
 	}
 
 	/// Delay `value` and `completed` events by the given interval, forwarding
@@ -879,19 +835,6 @@ extension Signal {
 	public func materialize() -> Signal<Event, NoError> {
 		return flatMapEvent(Signal.Event.materialize)
 	}
-
-	/// Treats all Results from the input producer as plain values, allowing them
-	/// to be manipulated just like any other value.
-	///
-	/// In other words, this brings Results “into the monad.”
-	///
-	/// - note: When a Failed event is received, the resulting producer will
-	///         send the `Result.failure` itself and then complete.
-	///
-	/// - returns: A producer that sends results as its values.
-	public func materializeResults() -> Signal<Result<Value, Error>, NoError> {
-		return flatMapEvent(Signal.Event.materializeResults)
-	}
 }
 
 extension Signal where Value: EventProtocol, Error == NoError {
@@ -901,16 +844,6 @@ extension Signal where Value: EventProtocol, Error == NoError {
 	/// - returns: A signal that sends values carried by `self` events.
 	public func dematerialize() -> Signal<Value.Value, Value.Error> {
 		return flatMapEvent(Signal.Event.dematerialize)
-	}
-}
-
-extension Signal where Value: ResultProtocol, Error == NoError {
-	/// Translate a signal of `Result` _values_ into a signal of those events
-	/// themselves.
-	///
-	/// - returns: A signal that sends values carried by `self` events.
-	public func dematerializeResults() -> Signal<Value.Value, Value.Error> {
-		return flatMapEvent(Signal.Event.dematerializeResults)
 	}
 }
 
@@ -1128,25 +1061,6 @@ extension Signal {
 				lifetime += self.withLatest(from: signal).observe(observer)
 			}
 		}
-	}
-
-	/// Forward the latest value from `samplee` with the value from `self` as a
-	/// tuple, only when `self` sends a `value` event.
-	/// This is like a flipped version of `sample(with:)`, but `samplee`'s
-	/// terminal events are completely ignored.
-	///
-	/// - note: If `self` fires before a value has been observed on `samplee`,
-	///         nothing happens.
-	///
-	/// - parameters:
-	///   - samplee: A producer whose latest value is sampled by `self`.
-	///
-	/// - returns: A signal that will send values from `self` and `samplee`,
-	///            sampled (possibly multiple times) by `self`, then terminate
-	///            once `self` has terminated. **`samplee`'s terminated events
-	///            are ignored**.
-	public func withLatest<Samplee: SignalProducerConvertible>(from samplee: Samplee) -> Signal<(Value, Samplee.Value), Error> where Samplee.Error == NoError {
-		return withLatest(from: samplee.producer)
 	}
 }
 
@@ -1556,25 +1470,20 @@ extension Signal {
 	/// - note: If multiple values are received before the interval has elapsed,
 	///         the latest value is the one that will be passed on.
 	///
-	/// - note: If `self` terminates while a value is being debounced,
-	///         the behaviour will be determined by `discardWhenCompleted`.
-	///         If `true`, that value will be discarded and the returned producer
-	///         will terminate immediately.
-	///         If `false`, that value will be delivered at the next debounce
-	///         interval.
+	/// - note: If the input signal terminates while a value is being debounced, 
+	///         that value will be discarded and the returned signal will 
+	///         terminate immediately.
 	///
 	/// - precondition: `interval` must be non-negative number.
 	///
 	/// - parameters:
 	///   - interval: A number of seconds to wait before sending a value.
 	///   - scheduler: A scheduler to send values on.
-	///   - discardWhenCompleted: A boolean to indicate if the latest value
-	///                             should be discarded on completion.
 	///
 	/// - returns: A signal that sends values that are sent from `self` at least
 	///            `interval` seconds apart.
-	public func debounce(_ interval: TimeInterval, on scheduler: DateScheduler, discardWhenCompleted: Bool = true) -> Signal<Value, Error> {
-		return flatMapEvent(Signal.Event.debounce(interval, on: scheduler, discardWhenCompleted: discardWhenCompleted))
+	public func debounce(_ interval: TimeInterval, on scheduler: DateScheduler) -> Signal<Value, Error> {
+		return flatMapEvent(Signal.Event.debounce(interval, on: scheduler))
 	}
 }
 

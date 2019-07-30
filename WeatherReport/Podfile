@@ -8,10 +8,11 @@ target 'WeatherReport' do
   # Pods for WeatherReport
   pod 'Alamofire'
   pod 'SwiftyJSON'
-  pod 'ReactiveSwift', '~> 5.0'
+  pod 'ReactiveCocoa', '~> 7.0.1'
   pod 'FMDB'
   pod 'iOSDropDown'
   pod 'SnapKit'
+  pod 'Result'
   
   target 'WeatherReportTests' do
     inherit! :search_paths

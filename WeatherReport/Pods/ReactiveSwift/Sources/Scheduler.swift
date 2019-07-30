@@ -111,8 +111,8 @@ public final class UIScheduler: Scheduler {
 	}()
 
 	deinit {
-		queueLength.deinitialize(count: 1)
-		queueLength.deallocate()
+		queueLength.deinitialize()
+		queueLength.deallocate(capacity: 1)
 	}
 	#endif
 
@@ -184,22 +184,15 @@ public final class UIScheduler: Scheduler {
 private final class DispatchSourceTimerWrapper: Hashable {
 	private let value: DispatchSourceTimer
 	
-	#if swift(>=4.1.50)
-	fileprivate func hash(into hasher: inout Hasher) {
-		hasher.combine(ObjectIdentifier(self))
-	}
-	#else
 	fileprivate var hashValue: Int {
 		return ObjectIdentifier(self).hashValue
 	}
-	#endif
 	
 	fileprivate init(_ value: DispatchSourceTimer) {
 		self.value = value
 	}
 	
 	fileprivate static func ==(lhs: DispatchSourceTimerWrapper, rhs: DispatchSourceTimerWrapper) -> Bool {
-		// Note that this isn't infinite recursion thanks to `===`.
 		return lhs === rhs
 	}
 }
@@ -400,7 +393,7 @@ public final class TestScheduler: DateScheduler {
 		}
 
 		func less(_ rhs: ScheduledAction) -> Bool {
-			return date < rhs.date
+			return date.compare(rhs.date) == .orderedAscending
 		}
 	}
 
@@ -571,10 +564,10 @@ public final class TestScheduler: DateScheduler {
 	public func advance(to newDate: Date) {
 		lock.lock()
 
-		assert(currentDate <= newDate)
+		assert(currentDate.compare(newDate) != .orderedDescending)
 
 		while scheduledActions.count > 0 {
-			if newDate < scheduledActions[0].date {
+			if newDate.compare(scheduledActions[0].date) == .orderedAscending {
 				break
 			}
 
@@ -604,7 +597,7 @@ public final class TestScheduler: DateScheduler {
 		lock.lock()
 
 		let newDate = currentDate.addingTimeInterval(-interval)
-		assert(currentDate >= newDate)
+		assert(currentDate.compare(newDate) != .orderedAscending)
 		_currentDate = newDate
 
 		lock.unlock()

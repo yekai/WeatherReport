@@ -56,8 +56,8 @@ class WRMainViewPresenter {
             currentDisplayedCityModel = cityList[selectedIndex]
             //current city name from model and then get weather data from DAL manager
             if let cityName = currentDisplayedCityModel?.cityName {
-                WRDALManager.sharedInstance.request(weatherInfo: cityName, successHandler: { (model) in
-                    self.currentDisplayedWeatherModel = model as? WRDALModel
+                WRDALManager.sharedInstance.request(weatherInfo: cityName, successHandler: { [weak self] (model) in
+                    self?.currentDisplayedWeatherModel = model as? WRDALModel
                     successHandler()
                 }) { (error) in
                     failureHandler(error)
