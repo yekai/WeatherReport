@@ -4,18 +4,18 @@ PODS:
     - FMDB/standard (= 2.7.5)
   - FMDB/standard (2.7.5)
   - iOSDropDown (0.3.2)
-  - Masonry (1.1.0)
   - ReactiveSwift (5.0.1):
     - Result (~> 4.1)
   - Result (4.1.0)
+  - SnapKit (4.2.0)
   - SwiftyJSON (5.0.0)
 
 DEPENDENCIES:
   - Alamofire
   - FMDB
   - iOSDropDown
-  - Masonry
   - ReactiveSwift (~> 5.0)
+  - SnapKit
   - SwiftyJSON
 
 SPEC REPOS:
@@ -23,20 +23,20 @@ SPEC REPOS:
     - Alamofire
     - FMDB
     - iOSDropDown
-    - Masonry
     - ReactiveSwift
     - Result
+    - SnapKit
     - SwiftyJSON
 
 SPEC CHECKSUMS:
   Alamofire: ae5c501addb7afdbb13687d7f2f722c78734c2d3
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   iOSDropDown: 9f23dca72d1bf8fb8ef9bc75dfd9ec07ea019bf7
-  Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
   ReactiveSwift: cac20a5bbe560c5806bd29c0fccf90d03b996ac1
   Result: bd966fac789cc6c1563440b348ab2598cc24d5c7
+  SnapKit: fe8a619752f3f27075cc9a90244d75c6c3f27e2a
   SwiftyJSON: 36413e04c44ee145039d332b4f4e2d3e8d6c4db7
 
-PODFILE CHECKSUM: 04e272ba106b9570a9dd4054baa660f4b3cf3a93
+PODFILE CHECKSUM: 5456ca47b83123925adfbbcb5acedc6933498535
 
 COCOAPODS: 1.6.2

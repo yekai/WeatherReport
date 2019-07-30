@@ -8,6 +8,7 @@
 
 import UIKit
 import iOSDropDown
+import SnapKit
 
 class WRMainViewController: UIViewController {
     @IBOutlet weak var weatherTitleLbl: UILabel!
@@ -64,22 +65,22 @@ class WRMainViewController: UIViewController {
     }
     
     func initConstraints() {
-        weatherTitleLbl.mas_makeConstraints{ (make) in
-            make?.centerX.offset()(0)
-            make?.height.offset()(50)
-            make?.top.offset()(0)
+        weatherTitleLbl.snp.makeConstraints { (make) in
+            make.top.equalTo(0)
+            make.height.equalTo(50)
+            make.centerX.equalToSuperview()
         }
-        maincityListDropDown.mas_makeConstraints { (make) in
-            make?.centerX.offset()(0)
-            make?.height.offset()(40)
-            make?.top.equalTo()(weatherTitleLbl)?.offset()(50)
-            make?.leading.offset()(40)
+        maincityListDropDown.snp.makeConstraints { (make) in
+            make.centerX.equalToSuperview()
+            make.leading.equalTo(40)
+            make.height.equalTo(40)
+            make.top.equalTo(weatherTitleLbl.snp.bottom)
         }
-        weatherInfoTable.mas_makeConstraints { (make) in
-            make?.centerX.offset()(0)
-            make?.height.offset()(180)
-            make?.top.equalTo()(maincityListDropDown)?.offset()(50)
-            make?.leading.offset()(40)
+        weatherInfoTable.snp.makeConstraints { (make) in
+            make.height.equalTo(180)
+            make.centerX.equalToSuperview()
+            make.top.equalTo(maincityListDropDown.snp.bottom).offset(10)
+            make.leading.equalTo(40)
         }
     }
     
