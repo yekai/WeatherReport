@@ -73,6 +73,7 @@ class WRMainViewModel: WRBaseViewModel {
                     observer.send(value: false)
                 }
             }
+            observer.sendCompleted()
         })
     }
 }
