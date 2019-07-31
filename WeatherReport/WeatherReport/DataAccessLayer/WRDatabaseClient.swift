@@ -28,18 +28,18 @@ class WRDatabaseClient {
     //the sqlite databse queue executor
     private var dbQueue: FMDatabaseQueue
     
+    private var documentDir: String = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
+    
     init() {
-        let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
-        self.dbPath = "\(path)/weatherReport.sqlite"
-        self.dbQueue = FMDatabaseQueue(path:dbPath)!
+        dbPath = "\(documentDir)/weatherReport.sqlite"
+        dbQueue = FMDatabaseQueue(path:dbPath)!
     }
     
     convenience init(forTest: Bool) {
         self.init()
         if forTest {
-            let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
-            self.dbPath = "\(path)/weatherReportTest.sqlite"
-            self.dbQueue = FMDatabaseQueue(path:dbPath)!
+            dbPath = "\(documentDir)/weatherReportTest.sqlite"
+            dbQueue = FMDatabaseQueue(path:dbPath)!
         }
     }
     
@@ -51,9 +51,13 @@ class WRDatabaseClient {
         if pathAvailable {
             //confirm the tables created
             self.dbQueue.inDatabase { (db) in
-                let result: FMResultSet = try! db.executeQuery("SELECT count(*) FROM sqlite_master where type='table';", values: nil)
-                while result.next() {
-                    count = Int(result.int(forColumnIndex: 0))
+                do {
+                    let result: FMResultSet = try db.executeQuery("SELECT count(*) FROM sqlite_master where type='table';", values: nil)
+                    while result.next() {
+                        count = Int(result.int(forColumnIndex: 0))
+                    }
+                } catch {
+                    print("sqlite_master select error.")
                 }
             }
         }
@@ -66,7 +70,11 @@ class WRDatabaseClient {
         if !isDatabaseAvailable() {
             models.forEach { (protocolObj) in
                 self.dbQueue.inDatabase { (db) in
-                    try! db.executeUpdate(protocolObj.sqlTableString(), values: nil)
+                    do {
+                        try db.executeUpdate(protocolObj.sqlTableString(), values: nil)
+                    } catch {
+                        print("Register Table \(protocolObj.sqlTableName()) error")
+                    }
                 }
             }
         }
@@ -86,16 +94,20 @@ class WRDatabaseClient {
     func query(_ model: WRDatabaseModelProtocol) -> [String: Any]? {
         var resultModel: [[String: Any]] = [[String: Any]]()
         self.dbQueue.inDatabase { (db) in
-            var executeSql = "SELECT * FROM \(model.sqlTableName()) WHERE cityName='\(model.cityString())'"
-            if let sqlOrderBy = model.sqlTableOrderBy() {
-                executeSql = "\(executeSql) \(sqlOrderBy)"
-            }
-            executeSql = "\(executeSql);"
-            let result:FMResultSet = try! db.executeQuery(executeSql, values: nil)
-            
-            while(result.next()) {
-                let objInfo:[String: Any] = result.resultDictionary as! [String : Any]
-                resultModel.append(objInfo)
+            do {
+                var executeSql = "SELECT * FROM \(model.sqlTableName()) WHERE cityName='\(model.cityString())'"
+                if let sqlOrderBy = model.sqlTableOrderBy() {
+                    executeSql = "\(executeSql) \(sqlOrderBy)"
+                }
+                executeSql = "\(executeSql);"
+                let result:FMResultSet = try db.executeQuery(executeSql, values: nil)
+                
+                while(result.next()) {
+                    let objInfo:[String: Any] = result.resultDictionary as! [String : Any]
+                    resultModel.append(objInfo)
+                }
+            } catch {
+                print("select table \(model.sqlTableName()) error")
             }
         }
         if resultModel.count > 0 {
@@ -108,12 +120,16 @@ class WRDatabaseClient {
     func queryAll(_ model: WRDatabaseModelProtocol) -> [[String: Any]] {
         var resultModel: [[String: Any]] = [[String: Any]]()
         self.dbQueue.inDatabase { (db) in
-            let executeSql = "SELECT * FROM \(model.sqlTableName());"
-            let result:FMResultSet = try! db.executeQuery(executeSql, values: nil)
-            
-            while(result.next()) {
-                let objInfo:[String: Any] = result.resultDictionary as! [String : Any]
-                resultModel.append(objInfo)
+            do {
+                let executeSql = "SELECT * FROM \(model.sqlTableName());"
+                let result:FMResultSet = try db.executeQuery(executeSql, values: nil)
+                
+                while(result.next()) {
+                    let objInfo:[String: Any] = result.resultDictionary as! [String : Any]
+                    resultModel.append(objInfo)
+                }
+            } catch {
+                print("select all table error")
             }
         }
         return resultModel
@@ -123,11 +139,15 @@ class WRDatabaseClient {
     func queryCount(_ model: WRDatabaseModelProtocol) -> Int {
         var count = 0
         self.dbQueue.inDatabase { (db) in
-            let executeSql = "SELECT count(*) FROM \(model.sqlTableName());"
-            let result:FMResultSet = try! db.executeQuery(executeSql, values: nil)
-            
-            while(result.next()) {
-                count = Int(result.int(forColumnIndex: 0))
+            do {
+                let executeSql = "SELECT count(*) FROM \(model.sqlTableName());"
+                let result:FMResultSet = try db.executeQuery(executeSql, values: nil)
+                
+                while(result.next()) {
+                    count = Int(result.int(forColumnIndex: 0))
+                }
+            } catch {
+                print("select model count error")
             }
         }
         return count

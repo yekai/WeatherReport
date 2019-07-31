@@ -27,19 +27,14 @@ class WRDALHttpClient {
         Alamofire.request(url,
                           method: method,
                           parameters: parameters,
-                          encoding: URLEncoding.default ,
+                          encoding: URLEncoding.default,
                           headers: headers)
             .responseJSON { (response) in
-                switch response.result {
-                case .success:
-                    //format handler is used to transform the json data to WRBasicModel
-                    let basicModel: WRBasicModel = formatterHandler(response.result.value)
-                    //deal with model in success handler
-                    successHandler(basicModel)
-                case .failure:
-                    //deal with error in fail handler
-                    failureHandler(response.result.error)
-                }
+                response.result.withValue({ (value) in
+                    successHandler(formatterHandler(value))
+                }).withError({ (error) in
+                    failureHandler(error)
+                })
         }
     }
 }
