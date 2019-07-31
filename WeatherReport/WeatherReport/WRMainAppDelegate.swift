@@ -16,6 +16,8 @@ class WRMainAppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        let rootView: WRMainVMViewController = (window?.rootViewController as! UINavigationController).visibleViewController as! WRMainVMViewController
+        rootView.viewModel = WRMainViewModel()
         return true
     }
 

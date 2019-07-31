@@ -36,6 +36,14 @@
 		5B6B82E422E84A7300C6E7C5 /* WeatherReportClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B6B82E322E84A7300C6E7C5 /* WeatherReportClientTests.swift */; };
 		5B6B82E622E8760600C6E7C5 /* WRTimeTaskManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B6B82E522E8760600C6E7C5 /* WRTimeTaskManager.swift */; };
 		5B6B82E822EE810000C6E7C5 /* WRDALProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B6B82E722EE810000C6E7C5 /* WRDALProtocol.swift */; };
+		5BAE0A7622F1666A00230ED9 /* WRBaseViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BAE0A7522F1666A00230ED9 /* WRBaseViewModel.swift */; };
+		5BAE0A7A22F1685C00230ED9 /* UIView+Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BAE0A7922F1685C00230ED9 /* UIView+Utility.swift */; };
+		5BAE0A7C22F16A7C00230ED9 /* UIFont+Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BAE0A7B22F16A7C00230ED9 /* UIFont+Utility.swift */; };
+		5BAE0A7F22F16E2200230ED9 /* WRRequestCommonError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BAE0A7E22F16E2200230ED9 /* WRRequestCommonError.swift */; };
+		5BAE0A8322F170E700230ED9 /* WRMainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BAE0A8222F170E700230ED9 /* WRMainViewModel.swift */; };
+		5BAE0A8622F1838100230ED9 /* WRMainVMViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BAE0A8522F1838100230ED9 /* WRMainVMViewController.swift */; };
+		5BAE0A8822F1842800230ED9 /* WRBaseVMViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BAE0A8722F1842800230ED9 /* WRBaseVMViewController.swift */; };
+		5BAE0A8A22F193EC00230ED9 /* UIColor+Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BAE0A8922F193EC00230ED9 /* UIColor+Utility.swift */; };
 		5F410809C540489A4DB00240 /* Pods_WeatherReportUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 775429F2418EE29E7E332EC5 /* Pods_WeatherReportUITests.framework */; };
 /* End PBXBuildFile section */
 
@@ -98,6 +106,14 @@
 		5B6B82E322E84A7300C6E7C5 /* WeatherReportClientTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeatherReportClientTests.swift; sourceTree = "<group>"; };
 		5B6B82E522E8760600C6E7C5 /* WRTimeTaskManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WRTimeTaskManager.swift; sourceTree = "<group>"; };
 		5B6B82E722EE810000C6E7C5 /* WRDALProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WRDALProtocol.swift; sourceTree = "<group>"; };
+		5BAE0A7522F1666A00230ED9 /* WRBaseViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WRBaseViewModel.swift; sourceTree = "<group>"; };
+		5BAE0A7922F1685C00230ED9 /* UIView+Utility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+Utility.swift"; sourceTree = "<group>"; };
+		5BAE0A7B22F16A7C00230ED9 /* UIFont+Utility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Utility.swift"; sourceTree = "<group>"; };
+		5BAE0A7E22F16E2200230ED9 /* WRRequestCommonError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WRRequestCommonError.swift; sourceTree = "<group>"; };
+		5BAE0A8222F170E700230ED9 /* WRMainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WRMainViewModel.swift; sourceTree = "<group>"; };
+		5BAE0A8522F1838100230ED9 /* WRMainVMViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WRMainVMViewController.swift; sourceTree = "<group>"; };
+		5BAE0A8722F1842800230ED9 /* WRBaseVMViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WRBaseVMViewController.swift; sourceTree = "<group>"; };
+		5BAE0A8922F193EC00230ED9 /* UIColor+Utility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Utility.swift"; sourceTree = "<group>"; };
 		6169A39EE82487EDE6CD6F11 /* Pods-WeatherReportTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WeatherReportTests.debug.xcconfig"; path = "Target Support Files/Pods-WeatherReportTests/Pods-WeatherReportTests.debug.xcconfig"; sourceTree = "<group>"; };
 		775429F2418EE29E7E332EC5 /* Pods_WeatherReportUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WeatherReportUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B1D8D70CC9E0EAFB2480B693 /* Pods-WeatherReportUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WeatherReportUITests.debug.xcconfig"; path = "Target Support Files/Pods-WeatherReportUITests/Pods-WeatherReportUITests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -167,6 +183,9 @@
 		4DBE4A2522E2D12E0059A9BE /* WeatherReport */ = {
 			isa = PBXGroup;
 			children = (
+				5BAE0A8422F1834E00230ED9 /* MVVMController */,
+				5BAE0A7D22F16DF500230ED9 /* Model */,
+				5BAE0A7422F1656700230ED9 /* ViewModel */,
 				5B6B82C422E6A72500C6E7C5 /* Controller */,
 				5B6B82C322E6A71800C6E7C5 /* View */,
 				5B6B82AA22E564D400C6E7C5 /* DataAccessLayer */,
@@ -238,8 +257,11 @@
 		5B6B82B522E58C4700C6E7C5 /* Category */ = {
 			isa = PBXGroup;
 			children = (
+				5BAE0A7922F1685C00230ED9 /* UIView+Utility.swift */,
 				5B6B82B622E58C6F00C6E7C5 /* Date+Utility.swift */,
 				4D7C36AB22E5F95800D894F1 /* String+Utility.swift */,
+				5BAE0A7B22F16A7C00230ED9 /* UIFont+Utility.swift */,
+				5BAE0A8922F193EC00230ED9 /* UIColor+Utility.swift */,
 			);
 			path = Category;
 			sourceTree = "<group>";
@@ -268,6 +290,32 @@
 				5B6B82D422E7F5E800C6E7C5 /* WRMainViewPresenter.swift */,
 			);
 			path = Controller;
+			sourceTree = "<group>";
+		};
+		5BAE0A7422F1656700230ED9 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				5BAE0A7522F1666A00230ED9 /* WRBaseViewModel.swift */,
+				5BAE0A8222F170E700230ED9 /* WRMainViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		5BAE0A7D22F16DF500230ED9 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				5BAE0A7E22F16E2200230ED9 /* WRRequestCommonError.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		5BAE0A8422F1834E00230ED9 /* MVVMController */ = {
+			isa = PBXGroup;
+			children = (
+				5BAE0A8522F1838100230ED9 /* WRMainVMViewController.swift */,
+				5BAE0A8722F1842800230ED9 /* WRBaseVMViewController.swift */,
+			);
+			path = MVVMController;
 			sourceTree = "<group>";
 		};
 		6B333009E19153B605DF95D3 /* Pods */ = {
@@ -431,6 +479,7 @@
 				"${PODS_ROOT}/Target Support Files/Pods-WeatherReport/Pods-WeatherReport-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/FMDB/FMDB.framework",
+				"${BUILT_PRODUCTS_DIR}/MBProgressHUD/MBProgressHUD.framework",
 				"${BUILT_PRODUCTS_DIR}/ReactiveCocoa/ReactiveCocoa.framework",
 				"${BUILT_PRODUCTS_DIR}/ReactiveSwift/ReactiveSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/Result/Result.framework",
@@ -444,6 +493,7 @@
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FMDB.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MBProgressHUD.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ReactiveCocoa.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ReactiveSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Result.framework",
@@ -529,19 +579,27 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5BAE0A7622F1666A00230ED9 /* WRBaseViewModel.swift in Sources */,
 				5B6B82B222E5837700C6E7C5 /* WRDALManager.swift in Sources */,
+				5BAE0A7C22F16A7C00230ED9 /* UIFont+Utility.swift in Sources */,
 				5B6B82D522E7F5E800C6E7C5 /* WRMainViewPresenter.swift in Sources */,
 				5B6B82A922E5597300C6E7C5 /* WRLocalizeMgr.swift in Sources */,
 				5B6B82BA22E58CC100C6E7C5 /* WRToolsConstants.swift in Sources */,
+				5BAE0A7A22F1685C00230ED9 /* UIView+Utility.swift in Sources */,
 				5B6B82E622E8760600C6E7C5 /* WRTimeTaskManager.swift in Sources */,
 				5B6B82B722E58C6F00C6E7C5 /* Date+Utility.swift in Sources */,
 				4DBE4A2922E2D12E0059A9BE /* WRMainViewController.swift in Sources */,
+				5BAE0A7F22F16E2200230ED9 /* WRRequestCommonError.swift in Sources */,
+				5BAE0A8622F1838100230ED9 /* WRMainVMViewController.swift in Sources */,
 				5B6B82D322E6D16E00C6E7C5 /* WeatherInfoTableViewCell.swift in Sources */,
 				5B6B82D122E6C77F00C6E7C5 /* DropDown+Utility.swift in Sources */,
+				5BAE0A8322F170E700230ED9 /* WRMainViewModel.swift in Sources */,
 				5B6B82C222E5B53600C6E7C5 /* WRDatabaseClient.swift in Sources */,
 				5B6B82E822EE810000C6E7C5 /* WRDALProtocol.swift in Sources */,
 				5B6B82AC22E5650000C6E7C5 /* WRDALConstants.swift in Sources */,
 				5B6B82B422E5893F00C6E7C5 /* WRDALModel.swift in Sources */,
+				5BAE0A8822F1842800230ED9 /* WRBaseVMViewController.swift in Sources */,
+				5BAE0A8A22F193EC00230ED9 /* UIColor+Utility.swift in Sources */,
 				4D7C36AC22E5F95800D894F1 /* String+Utility.swift in Sources */,
 				4DBE4A2722E2D12E0059A9BE /* WRMainAppDelegate.swift in Sources */,
 				5B6B82BC22E5906100C6E7C5 /* WRDALHttpClient.swift in Sources */,
