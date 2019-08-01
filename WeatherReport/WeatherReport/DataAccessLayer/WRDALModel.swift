@@ -27,6 +27,8 @@ protocol WRDatabaseModelProtocol {
     func cityString() -> String
     //query table order by parameter
     func sqlTableOrderBy() -> String?
+    //not persist keys in database
+    func sqlExceptKeys() -> [String]
 }
 
 /**
@@ -129,6 +131,10 @@ class WRDALModel: WRBasicModel {
  * implemnt all database related operation function
  **/
 extension WRDALModel: WRDatabaseModelProtocol {
+    func sqlExceptKeys() -> [String] {
+        return ["successModel"]
+    }
+    
     //current model city name
     func cityString() -> String {
         return cityName
@@ -150,15 +156,12 @@ extension WRDALModel: WRDatabaseModelProtocol {
     }
     //all updated or inserted keys for saving or updating model in database
     func sqlTableKeys() -> String {
-        return "id,cityName,updatedTime,weather,temperature,wind"
+        return self.propertyKeys(without: sqlExceptKeys()).joined(separator: ",")
     }
     //all updated or inserted values for saving or updating model in database
     func sqlTableValues() -> String {
-        let updatedTime = self.updatedTime.stringOfYYYYMMDDHHMMSS() ?? ""
-        let weather = self.weather ?? ""
-        let temperature = self.temperature ?? ""
-        let wind = self.wind ?? ""
-        return "'\(id)','\(cityName)','\(updatedTime)','\(weather)','\(temperature)','\(wind)'"
+        let values = [id, cityName, self.updatedTime.stringOfYYYYMMDDHHMMSS() ?? "", self.weather ?? "", self.temperature ?? "", self.wind ?? ""]
+        return values.compactMap{"'\($0)'"}.joined(separator: ",")
     }
     //query table order by parameters
     func sqlTableOrderBy() -> String? {
@@ -204,6 +207,10 @@ class WRCityModel: WRBasicModel {
  * implemnt all database related operation function
  **/
 extension WRCityModel: WRDatabaseModelProtocol {
+    func sqlExceptKeys() -> [String] {
+        return ["successModel"]
+    }
+    
     func cityString() -> String {
         return cityName
     }
@@ -225,10 +232,11 @@ extension WRCityModel: WRDatabaseModelProtocol {
     }
     
     func sqlTableKeys() -> String {
-        return "id,cityName,localizeCityKey"
+        return self.propertyKeys(without: sqlExceptKeys()).joined(separator: ",")
     }
     
     func sqlTableValues() -> String {
-        return "'\(id)','\(cityName)','\(localizeCityKey)'"
+        return self.propertyValues(without: sqlExceptKeys()).compactMap{"'\($0)'"}.joined(separator: ",")
     }
+
 }
