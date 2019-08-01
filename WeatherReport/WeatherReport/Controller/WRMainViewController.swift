@@ -102,7 +102,7 @@ class WRMainViewController: UIViewController {
         maincityListDropDown.optionArray = presenter!.displayedCityList
         maincityListDropDown.checkMarkEnabled = false
         maincityListDropDown.isSearchEnable = false
-        maincityListDropDown.selectedRowColor = UIColor.init(red: 200/255.0, green: 200/255.0, blue: 200/255.0, alpha: 1)
+        maincityListDropDown.selectedRowColor = UIColor(rgbValue: 0xC8C8C8)
         //drop down selector choose event, which is implemented from block
         maincityListDropDown.didSelect { (selectedText, index, id) in
             self.requestWeatherInfo(index)

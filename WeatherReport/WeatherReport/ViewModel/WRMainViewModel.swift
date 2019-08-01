@@ -60,7 +60,7 @@ class WRMainViewModel: WRBaseViewModel {
     }
     
     var weatherReportActionSignalProducer: SignalProducer<Bool, WRRequestCommonError>!
-    
+    let (requestSelectedIndexSignal, requestSelectedIndexObserver) = Signal<Int, NoError>.pipe()
     
     override func initialBind() {
         weatherReportActionSignalProducer = SignalProducer<Bool, WRRequestCommonError>({ [weak self] (observer, _) in
@@ -75,7 +75,6 @@ class WRMainViewModel: WRBaseViewModel {
                     observer.sendCompleted()
                 }
             }
-            
         })
     }
 }

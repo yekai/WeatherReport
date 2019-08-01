@@ -9,6 +9,8 @@
 import UIKit
 import iOSDropDown
 import SnapKit
+import ReactiveCocoa
+import ReactiveSwift
 
 class WRMainVMViewController: WRBaseVMViewController {
     @IBOutlet weak var weatherTitleLbl: UILabel!
@@ -61,6 +63,25 @@ class WRMainVMViewController: WRBaseVMViewController {
         self.navigationController?.navigationBar.isTranslucent = false;
     }
     
+    override func bindModel() {
+        self.mainViewModel.requestSelectedIndexSignal.observe(on: UIScheduler()).observeValues { [weak self] (selectedIndex) in
+            self?.mainViewModel.selectedIndex = selectedIndex
+            self?.mainViewModel.requestShowHudObserver.send(value: 3)
+            self?.mainViewModel.weatherReportActionSignalProducer.startWithResult {
+                self?.mainViewModel.requestShowHudObserver.send(value: 4)
+                if $0.error == nil && $0.value! {
+                    //while we get the weather data, reload table view to display weather info
+                    self?.weatherInfoTable.isHidden = false
+                    self?.weatherInfoTable.reloadData()
+                } else {
+                    //this is the only error displayed for customer, need to do more work on
+                    //the error
+                    self?.showNetworkUnavailable()
+                }
+            }
+        }
+    }
+    
     func initConstraints() {
         weatherTitleLbl.snp.makeConstraints { (make) in
             make.top.equalTo(0)
@@ -99,23 +120,10 @@ class WRMainVMViewController: WRBaseVMViewController {
         maincityListDropDown.optionArray = mainViewModel.displayedCityList
         maincityListDropDown.checkMarkEnabled = false
         maincityListDropDown.isSearchEnable = false
-        maincityListDropDown.selectedRowColor = UIColor.init(red: 200/255.0, green: 200/255.0, blue: 200/255.0, alpha: 1)
+        maincityListDropDown.selectedRowColor = UIColor(rgbValue: 0xC8C8C8)
         //drop down selector choose event, which is implemented from block
         maincityListDropDown.didSelect { (selectedText, index, id) in
-            self.mainViewModel.selectedIndex = index
-            self.mainViewModel.requestShowHudObserver.send(value: 3)
-            self.mainViewModel.weatherReportActionSignalProducer.startWithResult {
-                self.mainViewModel.requestShowHudObserver.send(value: 4)
-                if $0.error == nil && $0.value! {
-                    //while we get the weather data, reload table view to display weather info
-                    self.weatherInfoTable.isHidden = false
-                    self.weatherInfoTable.reloadData()
-                } else {
-                    //this is the only error displayed for customer, need to do more work on
-                    //the error
-                    self.showNetworkUnavailable()
-                }
-            }
+           self.mainViewModel.requestSelectedIndexObserver.send(value: index)
         }
         maincityListDropDown.arrowSize = 20
     }
@@ -139,7 +147,8 @@ extension WRMainVMViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if let displayedKeys = mainViewModel.currentDisplayedWeatherKeys, let displayedValues = mainViewModel.currentDisplayedWetherValues {
+        if let displayedKeys = mainViewModel.currentDisplayedWeatherKeys,
+           let displayedValues = mainViewModel.currentDisplayedWetherValues {
             let weatherInfoCell: WeatherInfoTableViewCell = tableView.dequeueReusableCell(withIdentifier: kWeatherReportCellIdentifier) as! WeatherInfoTableViewCell
             weatherInfoCell.configureValue(forCell: displayedKeys[indexPath.row],
                                            value: displayedValues[indexPath.row],
