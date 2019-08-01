@@ -69,11 +69,13 @@ class WRMainViewModel: WRBaseViewModel {
                 WRDALManager.sharedInstance.request(weatherInfo: cityName, successHandler: { (model) in
                     self?.currentDisplayedWeatherModel = model as? WRDALModel
                     observer.send(value: true)
+                    observer.sendCompleted()
                 }) { (error) in
                     observer.send(value: false)
+                    observer.sendCompleted()
                 }
             }
-            observer.sendCompleted()
+            
         })
     }
 }

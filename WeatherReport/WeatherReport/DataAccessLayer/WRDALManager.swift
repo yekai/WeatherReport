@@ -180,17 +180,15 @@ class WRDALManager {
                  successHandler: @escaping (WRBasicModel) -> Void,
                  failureHandler: @escaping (Error?) -> Void) {
         //confirm the network ability while each request from remote
-        let manager = NetworkReachabilityManager(host: kWeatherReportRequestURL)
-        manager?.listener = { status in
+        NetworkReachabilityManager.startListening(kWeatherReportRequestURL, reachableHandler: {
             //if the network is reachable, we can get the data from remote
-            if status == .reachable(.ethernetOrWiFi) || status == .reachable(.wwan) {
-                self.remoteFactory.request(weatherInfo: city, successHandler: { [weak self] (model) in
-                    if let weatherModel = model as? WRDALModel {
-                        //while the remote data is received, deal with in success handler
-                        successHandler(weatherModel)
-                        //and then store this model in database
-                        let _ = self?.databaseFactory.saveObj(weatherModel)
-                    }
+            self.remoteFactory.request(weatherInfo: city, successHandler: { [weak self] (model) in
+                if let weatherModel = model as? WRDALModel {
+                    //while the remote data is received, deal with in success handler
+                    successHandler(weatherModel)
+                    //and then store this model in database
+                    let _ = self?.databaseFactory.saveObj(weatherModel)
+                }
                 }, failureHandler: { (error) in
                     //if remote happens error and the nget the data from database
                     self.databaseFactory.request(weatherInfo: city, successHandler: { (model) in
@@ -199,41 +197,36 @@ class WRDALManager {
                     }, failureHandler: { (error) in
                         failureHandler(error)
                     })
-                })
-            } else {
-                //if the network is unreachable and then get the data from database
-                self.databaseFactory.request(weatherInfo: city, successHandler: { (model) in
-                    //while the database data is received, deal with in success handler
-                    successHandler(model)
-                }, failureHandler: { (error) in
-                    failureHandler(error)
-                })
-            }
+            })
+        }) {
+            //if the network is unreachable and then get the data from database
+            self.databaseFactory.request(weatherInfo: city, successHandler: { (model) in
+                //while the database data is received, deal with in success handler
+                successHandler(model)
+            }, failureHandler: { (error) in
+                failureHandler(error)
+            })
         }
-        manager?.startListening()
     }
     
     //store the remote data into database, do nothing for other exceptions
     func store(weatherInfo city: String) {
         //confirm the network ability while each request from remote
-        let manager = NetworkReachabilityManager(host: kWeatherReportRequestURL)
-        manager?.listener = { status in
-            //if the network is reachable, we can get the data from remote
-            if status == .reachable(.ethernetOrWiFi) || status == .reachable(.wwan) {
-                self.remoteFactory.request(weatherInfo: city, successHandler: { [weak self] (model) in
-                    // do all the operation in global queue
-                    DispatchQueue.global().async {
-                        if let weatherModel = model as? WRDALModel {
-                            //while the remote data is received, store this model in database
-                            let _ = self?.databaseFactory.saveObj(weatherModel)
-                        }
+        NetworkReachabilityManager.startListening(kWeatherReportRequestURL, reachableHandler: {
+            self.remoteFactory.request(weatherInfo: city, successHandler: { [weak self] (model) in
+                // do all the operation in global queue
+                DispatchQueue.global().async {
+                    if let weatherModel = model as? WRDALModel {
+                        //while the remote data is received, store this model in database
+                        let _ = self?.databaseFactory.saveObj(weatherModel)
                     }
+                }
                 }, failureHandler: { (error) in
                     //do nothing
-                })
-            }
+            })
+        }) {
+            //do nothing
         }
-        manager?.startListening()
     }
 }
 
