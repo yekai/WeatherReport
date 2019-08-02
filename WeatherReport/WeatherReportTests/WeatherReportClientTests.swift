@@ -7,101 +7,79 @@
 //
 
 import XCTest
+import SwiftyJSON
 @testable import WeatherReport
 
-class WeatherReportModelTests: XCTestCase {
+class WeatherReportClientTests: XCTestCase {
+    var databaseClient: WRDatabaseClient?
     var weatherModel: WRDALModel?
     var cityModel: WRCityModel?
-    var cityModelData: [String: String] = ["id":"AAA-BBB-CCC-DDD", "cityName":"Sydney","localizeCityKey":"com.city.Sydney"]
-    var weatherModelData: [String: String] = ["id":"AAA-BBB-CCC-DDD", "cityName":"Sydney","updatedTime":"2019-02-14 02:14:23","weather":"rainy","temperature":"13","wind":"12"]
+    var cityModelData: [String: String] = ["id":String.uniqueID(), "cityName":"Beijing","localizeCityKey":"com.city.Beijing"]
+    var weatherModelData: [String: String] = ["id":String.uniqueID(), "cityName":"Beijing","updatedTime":"2019-02-14 02:14:23","weather":"rainy","temperature":"13","wind":"12"]
     
     override func setUp() {
+        databaseClient = WRDatabaseClient(forTest: true)
+        databaseClient?.register([WRDALModel(), WRCityModel()])
         cityModel = WRCityModel(cityModelData["id"]!, cityName: cityModelData["cityName"]!, localizeCityKey:  cityModelData["localizeCityKey"]!)
         weatherModel = WRDALModel(weatherModelData["id"]!, cityName: weatherModelData["cityName"]!, updatedTime: weatherModelData["updatedTime"]!.dateOfYYYYMMDDHHMMSS()!, weather: weatherModelData["weather"], temperature: weatherModelData["temperature"], wind: weatherModelData["wind"])
     }
-
+    
     override func tearDown() {
     }
-
-    func testCityModel() {
-        assertCityModel()
-    }
     
-    func testWeatherModel() {
-        assertWeatherModel()
-    }
-    
-    func testEmptyCityModel() {
-        cityModel = WRCityModel()
-        XCTAssertTrue(cityModel?.cityName == "")
-        XCTAssertTrue(cityModel?.id == "")
-        XCTAssertTrue(cityModel?.localizeCityKey == "")
-        XCTAssertTrue(cityModel?.displayedCityName == "")
-    }
-    
-    func testCityModelFromDict() {
-        cityModel = WRCityModel(cityModelData)
-        assertCityModel()
-    }
-    
-    func testWeatherModelFromDict() {
-        weatherModel = WRDALModel(weatherModelData)
-        assertWeatherModel()
-    }
-    
-    func testEmptyWeatherModel() {
-        weatherModel = WRDALModel()
-        XCTAssertTrue(weatherModel?.cityName == "")
-        XCTAssertTrue(weatherModel?.id == "")
-        XCTAssertTrue(weatherModel?.weather == nil)
-        XCTAssertTrue(weatherModel?.updatedTime != nil)
-        XCTAssertTrue(weatherModel?.temperature == nil)
-        XCTAssertTrue(weatherModel?.wind == nil)
-    }
-    
-    func assertCityModel() {
-        XCTAssertTrue(cityModel?.cityName == "Sydney")
-        XCTAssertTrue(cityModel?.id == "AAA-BBB-CCC-DDD")
-        XCTAssertTrue(cityModel?.localizeCityKey == "com.city.Sydney")
-        XCTAssertTrue(cityModel?.displayedCityName == "Sydney")
+    func testDataBaseClient() {
+        XCTAssertTrue(databaseClient!.isDatabaseAvailable())
+        let _ = databaseClient?.saveObj(cityModel!)
+        let cities: [[String: Any]]? = databaseClient?.queryAll(WRCityModel())
+        XCTAssertTrue(cities!.count > 0)
+        let city:[String: Any]? = databaseClient?.query(cityModel!)
+        XCTAssertTrue(city!["cityName"]! as! String == "Beijing")
+        var count = databaseClient?.queryCount(cityModel!)
+        XCTAssertTrue(count! > 0)
         
-        XCTAssertTrue(cityModel?.cityString() == "Sydney")
-        XCTAssertTrue(cityModel?.sqlTableName() == "cityList")
-        XCTAssertTrue(cityModel?.sqlTableOrderBy() == nil)
-        XCTAssertTrue(cityModel?.sqlTableString() ==  """
-            CREATE TABLE IF NOT EXISTS cityList (id text PRIMARY KEY,
-            cityName text NOT NULL,
-            localizeCityKey text NOT NULL)
-            """)
-        XCTAssertTrue(cityModel?.sqlTableKeys() == "id,cityName,localizeCityKey")
-        XCTAssertTrue(cityModel?.sqlTableValues() ==  "'AAA-BBB-CCC-DDD','Sydney','com.city.Sydney'")
+        let _ = databaseClient?.saveObj(weatherModel!)
+        let weathers: [[String: Any]]? = databaseClient?.queryAll(WRDALModel())
+        XCTAssertTrue(weathers!.count > 0)
+        let weather:[String: Any]? = databaseClient?.query(weatherModel!)
+        XCTAssertTrue(weather!["cityName"]! as! String == "Beijing")
+        count = databaseClient?.queryCount(cityModel!)
+        XCTAssertTrue(count! > 0)
     }
     
-    func assertWeatherModel() {
-        XCTAssertTrue(weatherModel?.cityName == "Sydney")
-        XCTAssertTrue(weatherModel?.id == "AAA-BBB-CCC-DDD")
-        XCTAssertTrue(weatherModel?.updatedTime != nil)
-        XCTAssertTrue(weatherModel?.weather == "rainy")
-        XCTAssertTrue(weatherModel?.temperature == "13")
-        XCTAssertTrue(weatherModel?.wind == "12")
-        XCTAssertTrue(weatherModel?.displayedWind == "12km/h")
-        XCTAssertTrue(weatherModel?.displayedWeather == "rainy")
-        XCTAssertTrue(weatherModel?.displayedTemperature == "13°C")
-        XCTAssertTrue(weatherModel?.displayedUpdatedTime == "Thursday 02:14 AM")
-        
-        XCTAssertTrue(weatherModel?.cityString() == "Sydney")
-        XCTAssertTrue(weatherModel?.sqlTableName() == "weatherReport")
-        XCTAssertTrue(weatherModel?.sqlTableOrderBy() == "ORDER BY updatedTime DESC")
-        XCTAssertTrue(weatherModel?.sqlTableString() ==  """
-            CREATE TABLE IF NOT EXISTS weatherReport (id text PRIMARY KEY,
-            cityName text NOT NULL,
-            updatedTime DateTime NOT NULL,
-            weather text NOT NULL,
-            temperature text NOT NULL,
-            wind text NOT NULL)
-            """)
-        XCTAssertTrue(weatherModel?.sqlTableKeys() == "id,cityName,updatedTime,weather,temperature,wind")
-        XCTAssertTrue(weatherModel?.sqlTableValues() ==  "'AAA-BBB-CCC-DDD','Sydney','2019-02-14 02:14:23','rainy','13','12'")
+    func testHttpClient() {
+        let expect = expectation(description: "wrTest")
+        let timeout = 15 as TimeInterval
+        var parameters = kWeatherReportRequestParameters
+        parameters["city"] = "Sydney"
+        WRDALHttpClient.request(kWeatherReportRequestURL,
+                                parameters:parameters,
+                                formatterHandler: { (response) -> WRBasicModel in
+                                    XCTAssertTrue(response != nil)
+                                    XCTAssertTrue((JSON(response!).rawString() != nil))
+                                    return WRBasicModel("zzzz-zzzz-zzzz")
+            }, successHandler: { (model) in
+                XCTAssertTrue(model.id == "zzzz-zzzz-zzzz")
+                expect.fulfill()
+                
+        }) { (error) in
+            expect.fulfill()
+        }
+        waitForExpectations(timeout: timeout, handler: nil)
     }
-
+    
+    func testHttpErrorClient() {
+        let expect = expectation(description: "wrTest")
+        let timeout = 15 as TimeInterval
+        WRDALHttpClient.request("https://goo.com.cn",
+                                parameters:nil,
+                                formatterHandler: { (response) -> WRBasicModel in
+                                    return WRBasicModel("zzzz-zzzz-zzzz")
+        }, successHandler: { (model) in
+        }) { (error) in
+            XCTAssertTrue(error != nil)
+            expect.fulfill()
+        }
+        
+        waitForExpectations(timeout: timeout, handler: nil)
+    }
 }

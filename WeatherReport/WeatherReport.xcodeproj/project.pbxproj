@@ -18,6 +18,7 @@
 		4DBE4A3C22E2D1330059A9BE /* WeatherReportModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DBE4A3B22E2D1330059A9BE /* WeatherReportModelTests.swift */; };
 		4DBE4A4722E2D1330059A9BE /* WeatherReportUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DBE4A4622E2D1330059A9BE /* WeatherReportUITests.swift */; };
 		5B1408A322F2B31D0054E578 /* NSObject+Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B1408A222F2B31D0054E578 /* NSObject+Utility.swift */; };
+		5B3EAC2D22F317B80069580C /* weatherReportActionResponse.json in Resources */ = {isa = PBXBuildFile; fileRef = 5B3EAC2C22F317B80069580C /* weatherReportActionResponse.json */; };
 		5B6B82A522E5569600C6E7C5 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5B6B829D22E5569600C6E7C5 /* InfoPlist.strings */; };
 		5B6B82A622E5569600C6E7C5 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5B6B829F22E5569600C6E7C5 /* Localizable.strings */; };
 		5B6B82A922E5597300C6E7C5 /* WRLocalizeMgr.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B6B82A822E5597300C6E7C5 /* WRLocalizeMgr.swift */; };
@@ -87,6 +88,7 @@
 		4DBE4A4622E2D1330059A9BE /* WeatherReportUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherReportUITests.swift; sourceTree = "<group>"; };
 		4DBE4A4822E2D1330059A9BE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5B1408A222F2B31D0054E578 /* NSObject+Utility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSObject+Utility.swift"; sourceTree = "<group>"; };
+		5B3EAC2C22F317B80069580C /* weatherReportActionResponse.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = weatherReportActionResponse.json; sourceTree = "<group>"; };
 		5B6B829E22E5569600C6E7C5 /* en-AU */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-AU"; path = "en-AU.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		5B6B82A022E5569600C6E7C5 /* en-AU */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-AU"; path = "en-AU.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		5B6B82A122E5569600C6E7C5 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -210,6 +212,7 @@
 			children = (
 				5B6B82E322E84A7300C6E7C5 /* WeatherReportClientTests.swift */,
 				4DBE4A3B22E2D1330059A9BE /* WeatherReportModelTests.swift */,
+				5B3EAC2C22F317B80069580C /* weatherReportActionResponse.json */,
 				4DBE4A3D22E2D1330059A9BE /* Info.plist */,
 			);
 			path = WeatherReportTests;
@@ -251,7 +254,6 @@
 				5B6B82AB22E5650000C6E7C5 /* WRDALConstants.swift */,
 				5B6B82E722EE810000C6E7C5 /* WRDALProtocol.swift */,
 				5B6B82B122E5837700C6E7C5 /* WRDALManager.swift */,
-				5B6B82B322E5893F00C6E7C5 /* WRDALModel.swift */,
 				5B6B82BB22E5906100C6E7C5 /* WRDALHttpClient.swift */,
 				5B6B82C122E5B53600C6E7C5 /* WRDatabaseClient.swift */,
 			);
@@ -310,6 +312,7 @@
 		5BAE0A7D22F16DF500230ED9 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				5B6B82B322E5893F00C6E7C5 /* WRDALModel.swift */,
 				5BAE0A7E22F16E2200230ED9 /* WRRequestCommonError.swift */,
 			);
 			path = Model;
@@ -461,6 +464,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5B3EAC2D22F317B80069580C /* weatherReportActionResponse.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

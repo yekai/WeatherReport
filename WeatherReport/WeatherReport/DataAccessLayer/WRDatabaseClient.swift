@@ -81,6 +81,7 @@ class WRDatabaseClient {
     }
     
     //save one model data in databse
+    @discardableResult
     func saveObj(_ model: WRDatabaseModelProtocol) -> Bool {
         var res = true
         self.dbQueue.inDatabase { (db) in

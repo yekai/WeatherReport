@@ -124,7 +124,7 @@ fileprivate class WRDatabaseFactory: WRDALDatabaseProtocol {
     //save local initialed city list in database
     func saveSupportedCityList(_ models: [WRCityModel]) {
         models.forEach { (model) in
-            let _ = databaseClient.saveObj(model)
+            databaseClient.saveObj(model)
         }
     }
     //query model data count number in database
@@ -132,6 +132,7 @@ fileprivate class WRDatabaseFactory: WRDALDatabaseProtocol {
         return databaseClient.queryCount(model)
     }
     //save data model in database
+    @discardableResult
     func saveObj(_ model: WRDatabaseModelProtocol) -> Bool {
         return databaseClient.saveObj(model)
     }
@@ -187,7 +188,7 @@ class WRDALManager {
                     //while the remote data is received, deal with in success handler
                     successHandler(weatherModel)
                     //and then store this model in database
-                    let _ = self?.databaseFactory.saveObj(weatherModel)
+                    self?.databaseFactory.saveObj(weatherModel)
                 }
                 }, failureHandler: { (error) in
                     //if remote happens error and the nget the data from database

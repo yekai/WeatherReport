@@ -14,7 +14,7 @@ target 'WeatherReport' do
   pod 'SnapKit'
   pod 'Result'
   pod 'MBProgressHUD'
-
+  
   target 'WeatherReportTests' do
     inherit! :search_paths
     # Pods for testing

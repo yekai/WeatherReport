@@ -149,7 +149,7 @@ extension WRMainVMViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if let displayedKeys = mainViewModel.currentDisplayedWeatherKeys,
            let displayedValues = mainViewModel.currentDisplayedWetherValues {
-            let weatherInfoCell: WeatherInfoTableViewCell = tableView.dequeueReusableCell(withIdentifier: kWeatherReportCellIdentifier) as! WeatherInfoTableViewCell
+            let weatherInfoCell = tableView.dequeueReusableCell(withIdentifier: kWeatherReportCellIdentifier) as! WeatherInfoTableViewCell
             weatherInfoCell.configureValue(forCell: displayedKeys[indexPath.row],
                                            value: displayedValues[indexPath.row],
                                            highlight: !mainViewModel.doescurrentWeatherDataFromRemote &&
